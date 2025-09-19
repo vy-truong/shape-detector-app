@@ -1,2 +1,18 @@
 @import "tailwindcss";
 
+:root {
+    --accent: hsl(50, 100%, 86%);
+    --accent-hover: hsl(45, 100%, 80%);
+    --text: hsl(0, 0%, 10%);
+  }
+  
+  .btn-accent {
+    background-color: var(--accent);
+    color: var(--text);
+    transition: background-color 0.2s;
+  }
+  
+  .btn-accent:hover {
+    background-color: var(--accent-hover);
+  }
+  

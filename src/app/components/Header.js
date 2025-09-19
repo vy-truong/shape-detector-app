@@ -1,12 +1,16 @@
 "use client"; 
+import { playfair, intern } from "../fonts";
 import Link from "next/link"; 
+import { useState } from "react";
 
 
 export default function Header() {
+    const  [openMenu, setOpenMenu ] = useState(false);
+
     return (
         <header className="w-full flex items-center justify-between px-8 py-4 shadow">
             {/* Left: Logo */}
-            <div className="text-xl font-bold">SHAPE FINDER</div>
+            <div className={` ${playfair.className} text-2xl font-bold`}>SHAPE FINDER</div>
 
             {/* Center: Main Nav */}
             <nav className="flex gap-6">
