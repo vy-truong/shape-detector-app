@@ -37,11 +37,12 @@ export default function Header() {
     return (
         <header className=" relative w-full flex items-center justify-between px-8 py-4 shadow">
             {/* Left: Logo */}
-            <div className={` ${playfair.className} text-2xl font-bold`}>SHAPE FINDER</div>
+            <div className={` ${playfair.className} text-2xl font-bold`}>
+                <h2>SHAPE FINDER</h2>
+            </div>
 
             {/* Center: Main Nav */}
             <nav className="hidden text-md lg:gap-20 md:flex gap-6 ">
-                
                 <Link href="/">Home</Link>
                 <Link href="/about">About Us</Link>
                 <Link href="/shapefinder">Shape Finder</Link>

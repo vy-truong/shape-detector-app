@@ -4,6 +4,11 @@
     --accent: hsl(50, 100%, 86%);
     --accent-hover: hsl(45, 100%, 80%);
     --text: hsl(0, 0%, 10%);
+    --heading: hsl(206, 48%, 40%);
+  }
+  
+  body p{
+    font-size: 16px;
   }
   
   .btn-accent {
@@ -15,4 +20,8 @@
   .btn-accent:hover {
     background-color: var(--accent-hover);
   }
-  
+
+  h2 {
+    color: var(--heading);
+  }
+
