@@ -1,0 +1,68 @@
+[
+    {
+      "id": "p001",
+      "name": "Wrap Midi Dress",
+      "brand": "Ever & Co",
+      "price": 89.99,
+      "currency": "USD",
+      "image":"img/flowy-top1.png",
+      "url": "https://example.com/wrap-midi-dress",
+      "category": "skirt", 
+      "color": "Beige",
+      "shapeTags": ["Hourglass","Pear","Rectangle"],
+      "notes": "wrap, v-neck, waist emphasis"
+    },
+    {
+      "id": "p002",
+      "name": "Structured Shoulder Top",
+      "brand": "Line & Edge",
+      "price": 39.00,
+      "currency": "USD",
+      "image": "img/flowy-top1.png",
+      "url": "https://example.com/structured-shoulder-top",
+      "category": "top",
+      "color": "White",
+      "shapeTags": ["Pear","Spoon"],
+      "notes": "shoulder detail balances hips"
+    },
+    {
+      "id": "p003",
+      "name": "High-Waist Straight Jeans",
+      "brand": "Denim Days",
+      "price": 69.50,
+      "currency": "USD",
+      "image": "img/flowy-top1.png",
+      "url": "https://example.com/high-waist-straight-jeans",
+      "category": "pants",
+      "color": "Blue",
+      "shapeTags": ["Hourglass","Pear","Apple","Rectangle"],
+      "notes": "high-rise, straight leg"
+    },
+    {
+      "id": "p004",
+      "name": "Bias-Cut Midi Skirt",
+      "brand": "Curve Co.",
+      "price": 57.00,
+      "currency": "USD",
+      "image": "https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=600",
+      "url": "https://example.com/bias-midi-skirt",
+      "category": "skirt",
+      "color": "Brown",
+      "shapeTags": ["Inverted Triangle","Apple"],
+      "notes": "adds flow below, soft drape"
+    },
+    {
+      "id": "p005",
+      "name": "Belted Blazer",
+      "brand": "Tailor Lab",
+      "price": 99.00,
+      "currency": "USD",
+      "image": "https://images.unsplash.com/photo-1520975652289-c464581ff2e1?q=80&w=600",
+      "url": "https://example.com/belted-blazer",
+      "category": "top",
+      "color": "Black",
+      "shapeTags": ["Hourglass","Rectangle"],
+      "notes": "waist emphasis"
+    }
+  ]
+  
