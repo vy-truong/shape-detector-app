@@ -1,7 +1,7 @@
 
 import Header from "./components/Header";
 import "./globals.css";
-import { playfair, inter } from "./fonts";
+
 
 export const metadata = {
   title: "Wardrobe Picks",
@@ -13,7 +13,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className="bg-bg text-text font-inter">
         <Header /> 
         {children}
       </body>

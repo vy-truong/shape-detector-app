@@ -1,34 +1,64 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Mirza:wght@400;500;600;700&family=Noto+Sans+Mono:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
-:root {
-    --accent: hsl(50, 100%, 86%);
-    --accent-hover: hsl(45, 100%, 80%);
-    --text: hsl(0, 0%, 10%);
-    --heading: hsl(206, 48%, 40%);
-  }
+@theme {
+  /* 🎨 Colors */
+  --color-bg: hsl(38 52% 96%);
+  /* --color-text: hsl(0 0% 24%); */
+  --color-text: hsl(120 24% 6%);
   
-  body p{
-    font-size: 16px;
-  }
+
+  /* --color-heading: hsl(206 48% 40%); */
+  --color-heading: hsl(211 45% 42%); 
+  --color-heading-hl: hsl(206 48% 60%); /*lighter hover blue*/
+  --color-heading-hd: hsl(206 48% 30%); 
+  /* darker blue for hover */
+
+  /* --color-accent: hsl(50 100% 86%); */
+  /* --color-accent-hover: hsl(45 100% 80%); */
+
+  /* --color-muted: hsl(0 0% 40%); */
+  /* --color-muted-2: hsl(0 0% 55%); lighter muted */
   
-  .btn-accent {
-    background-color: var(--accent);
-    color: var(--text);
-    transition: background-color 0.2s;
-  }
+  /* --color-border: hsl(0 0% 85%); */ 
+
   
-  .btn-accent:hover {
-    background-color: var(--accent-hover);
-  }
+  
 
-  h1 {
-    font: 'Playfair'
-  }
+  /* 🔤 Font sizes */
+  --text-xs: 0.75rem;   /* 12px */
+  --text-sm: 0.875rem;  /* 14px */
+  --text-base: 1rem;    /* 16px */
+  --text-lg: 1.25rem;   /* 20px */
+  --text-xl: 1.5rem;    /* 24px */
+  --text-2xl: 2rem;     /* 32px */
+  --text-3xl: 2.5rem;   /* 40px */
+  --text-4xl: 3rem;     /* 48px */
+  --text-5xl: 4rem;
 
-  h2 {
-    color: var(--heading);
-  }
+   /* ✍️ Fonts */
+   --font-inter: "Inter", sans-serif;
+   --font-fraunces: "Fraunces", serif;
+   --font-playfair: "Playfair Display", serif;
+   --font-cormo: "Cormorant Garamond", serif; 
+   
 
+    /* 🌑 Shadows */
 
+    /* 🌑 Drop shadow (classic material style) */
+  --shadow-drop: 0 8px 20px rgba(0, 0, 0, 0.15);
 
+  /* 🌕 Inner shadow (neumorphism feel) */
+  --shadow-inner: inset 4px 4px 8px rgba(0, 0, 0, 0.15),
+  inset -4px -4px 8px rgba(255, 255, 255, 0.8);
+
+  /* 🌗 Combo: inner + drop (soft neumorphism depth) */
+  --shadow-combo: 
+  inset 2px 2px 6px rgba(0, 0, 0, 0.15),
+  inset -2px -2px 6px rgba(255, 255, 255, 0.8),
+  0 6px 12px rgba(0, 0, 0, 0.12);
+  
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.2), 
+               0 4px 6px rgba(0, 0, 0, 0.1); /* more realistic */
+}

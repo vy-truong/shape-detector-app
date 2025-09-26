@@ -1,5 +1,4 @@
 "use client"; 
-import { playfair, intern } from "../fonts";
 import Link from "next/link"; 
 import { useState } from "react";
 
@@ -35,25 +34,49 @@ export default function Header() {
       ];
 
     return (
-        <header className=" relative w-full flex items-center justify-between px-8 py-4 shadow">
+        <header className=" relative w-full flex items-center justify-between px-[4rem] py-4 bg-white">
             {/* Left: Logo */}
-            <div className={` ${playfair.className} text-2xl font-bold`}>
-                <h2>SHAPE FINDER</h2>
+            <div className= "text-xl font-cormo text-heading font-bold">
+                {/* <h2>SHAPE FINDER</h2> */}
+                <Link href="/">
+                    SHAPE FINDER
+                </Link>
             </div>
 
             {/* Center: Main Nav */}
-            <nav className="hidden text-md lg:gap-20 md:flex gap-6 ">
-                <Link href="/">Home</Link>
-                <Link href="/about">About Us</Link>
-                <Link href="/shapefinder">Shape Finder</Link>
-                <Link href="/contact">Contact Us</Link>
-            </nav>
+            <nav className="hidden text-md lg:gap-20 md:flex gap-6">
+                <Link 
+                    href="/" 
+                    className="relative font-medium text-heading hover:text-heading-hl italic transition-colors duration-200"
+                >
+                    Home
+                </Link>
+                <Link 
+                    href="/about" 
+                    className="relative font-medium text-heading hover:text-heading-hl  italic transition-colors duration-200"
+                >
+                    About Us
+                </Link>
+                <Link 
+                    href="/shapefinder" 
+                    className="relative font-medium text-heading hover:text-heading-hl italic transition-colors duration-200"
+                >
+                    Shape Finder
+                </Link>
+                <Link 
+                    href="/contact" 
+                    className="relative font-medium text-heading hover:text-heading-hl italic transition-colors duration-200"
+                >
+                    Contact Us
+                </Link>
+                </nav>
+
 
             {/* Right: Profile */}
             <div className="hidden md:block">
                 <Link href="/profile" className="flex items-center gap-2">
                 {/* <User size={20} /> */}
-                <span>My Profile</span>
+                <span className="text-heading hover:text-heading-hl italic">My Profile</span>
                 </Link>
             </div>
 

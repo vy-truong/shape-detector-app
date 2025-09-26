@@ -13,7 +13,6 @@ export default function Footer() {
 
     //use useeffect for after click it will get the auto email 
     return (
-        <body>
         <footer className="footer-container bg-white py-20 px-auto md:px-20">
             <div className="px-[5rem] grid grid-cols-1 md:grid-cols-3 gap-20 mb-[7rem] md:text-left ">
 
@@ -138,6 +137,6 @@ export default function Footer() {
             </div>
         </footer>
         
-        </body>
+   
 );
 }
