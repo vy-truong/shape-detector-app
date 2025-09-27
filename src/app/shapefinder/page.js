@@ -128,37 +128,17 @@ export default function ShapeFinder() {
 
     {/* Measurement Form */}
     
-    <section className="bg-white rounded-xl shadow-drop p-[5rem] sm:p-[5rem]"> 
-        <h2 className="text-2xl text-center text-heading font-fraunces font-md mb-4">
+    <section className="bg-heading-hl rounded-xl shadow-drop px-[5rem] py-[2rem] sm:px-[4rem] sm:py-[3rem]"> 
+        <h2 className="text-2xl text-center text-white font-fraunces font-light mb-4">
             Your Measurement
         </h2>
+        <p className="text-mutedlight text-center text-sm sm:text-base mb-6">
+            Please measure around the fullest part of each area while standing straight.
+        </p>
         <form  onSubmit={handleSubmit} className="space-y-4">
             {/* Unit Radio button*/}
-            {/* <div className="flex justify-center rounded-full p-1 text-sm sm:text-base" >
-                <div className="">
-                <label>
-                    <input
-                    
-                    type="radio"
-                        value="cm"
-                        checked={units === "cm"}
-                        onChange={(e) => setUnits(e.target.value)}
-                    />{" "}
-                    cm
-                </label>
-                </div>
-                <label>
-                    <input
-                    type="radio"
-                        value="in"
-                        checked={units === "in"}
-                        onChange={(e) => setUnits(e.target.value)}
-                    />{" "}
-                    in
-                </label>
-            </div> */}
-            <div className="flex justify-center mt-[1.5rem] mb-[1.5rem]">
-                <div className="flex bg-bg rounded-full py-2 px-4">
+            <div className="flex justify-center mt-[1.5rem] mb-[1.5rem]"> 
+                <div className="flex bg-mutedlight rounded-full py-2 px-4">
                     <button
                     type="button"
                     onClick={() => setUnits("cm")}
@@ -187,92 +167,107 @@ export default function ShapeFinder() {
 
 
             {/* Body measuremet */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="flex flex-col">
-                    <label>Bust</label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-[2rem] max-w-xl mx-auto">
+                <div className="flex flex-col gap-1">
+                    <label className="font-medium">Bust</label>
                     <input
                     type="number"
                     placeholder="Bust"
                     value={bust}
                     onChange={(e) => setBust(e.target.value)}
-                    className="border px-4 py-2 rounded-md"
+                    className="shadow-combo bg-bg px-4 py-2 rounded-md w-full"
                     />
                 </div>
 
-                <div className="flex flex-col">
-                    <label>Waist</label>
+                <div className="flex flex-col gap-1">
+                    <label className="font-medium">Waist</label>
                     <input
                     type="number"
                     placeholder="Waist"
                         value={waist}
                         onChange={(e) => setWaist(e.target.value)}
-                    className="border px-4 py-2 rounded-md"
+                    className="shadow-combo bg-bg px-4 py-2 rounded-md"
                     />
                 </div> 
 
-                <div className="flex flex-col">
-                    <label>High-hip</label>
+                <div className="flex flex-col gap-1">
+                    <label className="font-medium">High-hip</label>
                     <input
                     type="number"
                     placeholder="High Hip"
                     value={highHip}
                     onChange={(e) => setHighHip(e.target.value)}
-                    className="border px-4 py-2 rounded-md"
+                    className="shadow-combo bg-bg px-4 py-2 rounded-md"
                     />
                 </div>
-                <div className="flex flex-col">
-                    <label>Hip</label>
+                <div className="flex flex-col gap-1">
+                    <label className="font-medium">Hip</label>
                     <input
                     type="number"
                     placeholder="Hip"
                     value={hip}
                     onChange={(e) => setHip(e.target.value)}
-                    className="border px-4 py-2 rounded-md"
+                    className=" shadow-combo bg-bg px-4 py-2 rounded-md"
                     />
                 </div>
             </div>
-
-
             <div/>
-            <button
-                type="submit"
-                className="w-full bg-heading text-white py-3 rounded-md font-semibold hover:bg-heading-hl transition"
-            
-            >
-                Get result
-            </button>
+            <div className="flex justify-center mt-[3rem]">
+                <button
+                    type="submit"
+                    className="w-80 text-center bg-heading text-white py-3 rounded-md font-semibold hover:bg-heading-hd transition"
+                >
+                    Get result
+                </button>
+            </div>
         </form>
         {error && <p className="text-red-500 mt-4">{error}</p>}
     </section>
 
         {/* Result */}
         {bodyShape && (
-        <section className="bg-white rounded-lg p-4 sm:p-6 space-y-6">
-            <h2 className="text-xl sm:text-2xl font-bold">You have {bodyShape} body shape</h2>
-            <section className="p-6 rounded-lg shadow-sm">
+        <section className="bg-white rounded-lg p-5 sm:px-10 py-20 space-y-6">
+            <h2 className="text-lg sm:text-2xl font-fraunces font-bold italic mb-[3rem]">
+                You have{" "}
+                <span className="text-heading">
+                    {bodyShape}
+                </span>{" "}
+                body shape
+            </h2>
+            
+            {/* RATIO SECTION */}
+            <section className="p-6 rounded-lg bg-shadow-md bg-mutedwarm">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 text-center">
                 {/* Bust */}
                 <div>
-                <p className="text-gray-500 text-sm tracking-wide">Bust</p>
-                <p className="text-2xl font-bold">{bust}{units}</p>
+                <p className="text-text text-sm tracking-wide mb-[0.5rem]">Bust</p>
+                <p className="text-2xl font-semibold  text-heading mt-[0.5rem]">
+                    {bust}{units}
+                </p>
                 </div>
 
                 {/* Waist */}
                 <div>
-                <p className="text-gray-500 text-sm tracking-wide">Waist</p>
-                <p className="text-2xl font-bold">{waist}{units}</p>
+                <p className="text-text text-sm tracking-wide mb-[0.5rem]">Waist</p>
+                <p className="text-2xl font-semibold text-heading mt-[0.5rem]">
+                    {waist}{units}
+                </p>
                 </div>
 
                 {/* Hip */}
                 <div>
-                <p className="text-gray-500 text-sm tracking-wide">Hip</p>
-                <p className="text-2xl font-bold">{hip}{units}</p>
+                <p className="text-text text-sm tracking-wide mb-[0.5rem]">Hip</p>
+                <p className="text-2xl font-semibold text-heading mt-[0.5rem]">
+                    {hip}{units}
+                </p>
                 </div>
 
                 {/* Bust/Hip Ratio */}
                 <div>
-                <p className="text-gray-500 text-sm tracking-wide">Bust/Hip Ratio</p>
-                <p className="text-2xl font-bold">{(bust / hip).toFixed(2)}</p>
+                <p className="text-text text-sm tracking-wide mb-[0.5rem]">Bust/Hip Ratio</p>
+                <p className="text-2xl font-semibold text-heading mt-[0.5rem]">
+                    {(bust / hip).toFixed(2)}
+                </p>
                 </div>
             </div>
 
@@ -281,22 +276,29 @@ export default function ShapeFinder() {
             {/* Extra ratios */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 text-center">
                 <div>
-                <p className="text-gray-500 text-sm tracking-wide">Waist/Bust Ratio</p>
-                <p className="text-xl font-semibold">{(waist / bust).toFixed(2)}</p>
+                <p className="text-text text-sm tracking-wide mb-[0.5rem]">Waist/Bust Ratio</p>
+                <p className="text-xl font-semibold text-heading mt-[0.5rem]">
+                    {(waist / bust).toFixed(2)}
+                </p>
                 </div>
                 <div>
-                <p className="text-gray-500 text-sm tracking-wide">Waist/Hip Ratio</p>
-                <p className="text-xl font-semibold">{(waist / hip).toFixed(2)}</p>
+                <p className="text-text text-sm tracking-wide mb-[0.5rem]">Waist/Hip Ratio</p>
+                <p className="text-xl font-semibold text-heading mt-[0.5rem]">
+                    {(waist / hip).toFixed(2)}
+                </p>
                 </div>
                 <div>
-                <p className="text-gray-500 text-sm tracking-wide">Bust-Hip Difference</p>
-                <p className="text-xl font-semibold">{(bust - hip).toFixed(1)} {units}</p>
+                <p className="text-text text-sm tracking-wide mb-[0.5rem]">Bust-Hip Difference</p>
+                <p className="text-xl font-semibold text-heading mt-[0.5rem]">
+                    {(bust - hip).toFixed(1)} {units}
+                </p>
                 </div>
             </div>
             </section>
+
             {/* Shape Explanation */}
-            <div className="bg-gray-50 p-6 rounded-lg shadow-sm">
-            <p className="text-gray-700 leading-relaxed">
+            <div className="bg-mutedwarm p-6 rounded-lg shadow-sm">
+            <p className="text-text leading-relaxed">
                 {shapeExplanations[bodyShape].text}
             </p>
             </div>
@@ -310,54 +312,57 @@ export default function ShapeFinder() {
                 </ul>
             </div>
 
-                {/* Curated Style Guide */}
-                <div>
-                <h3 className="font-bold text-lg mb-3">Curated Style Guide</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="p-4 border rounded-md">
-
-                        <div className="flex item-center gap-2 ">
-                        <IoShirtOutline className="text-xl"/>
-                        <h4 className="font-semibold">Top</h4>
-                        </div>
-                        <p className="text-sm text-gray-600">
-                            Flowing tops like tunics, V-necks, and empire-waist blouses
-                            create a flattering vertical line.
-                        </p>
-
-                    </div>
-                    <div className="p-4 border rounded-md">
-                    <div className="flex item-center gap-2 ">
-                        <IoShirtOutline className="text-xl"/>
-                        <h4 className="font-semibold">Dress</h4>
-                        </div>
-                        <p className="text-sm">
-                            A-line, shift, or empire-waist dresses gracefully skim your
-                            midsection.
-                        </p>
-                    </div>
-                    <div className="p-4 border rounded-md">
-                    <div className="flex item-center gap-2 ">
-                        <IoShirtOutline className="text-xl"/>
-                        <h4 className="font-semibold">Outdoor</h4>
-                        </div>
-                        <p className="text-sm text-gray-600">
-                        Light layers and flowy jackets add balance and draw attention
-                        upward.
-                        </p>
-                    </div>
-                    <div className="p-4 border rounded-md">
-                    <div className="flex item-center gap-2 ">
-                        <IoShirtOutline className="text-xl"/>
-                        <h4 className="font-semibold">Bottom</h4>
-                        </div>
-                        <p className="text-sm text-gray-600">
-                        Wide-leg pants or bootcut jeans balance proportions and flatter
-                        curves.
-                        </p>
-                    </div>
+               {/* Curated Style Guide */}
+            <div>
+            <h3 className="text-lg sm:text-2xl font-fraunces font-bold italic mb-[3rem]">Curated Style Guide</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                
+                {/* Top */}
+                <div className="p-5 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                <div className="flex items-center gap-2 mb-2">
+                    <IoShirtOutline className="text-xl text-heading" />
+                    <h4 className="font-semibold text-heading">Top</h4>
                 </div>
+                <p className="text-sm text-text">
+                    Flowing tops like tunics, V-necks, and empire-waist blouses create a flattering vertical line.
+                </p>
                 </div>
+
+                {/* Dress */}
+                <div className="p-5 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                <div className="flex items-center gap-2 mb-2">
+                    <IoShirtOutline className="text-xl text-heading" />
+                    <h4 className="font-semibold text-heading">Dress</h4>
+                </div>
+                <p className="text-sm text-text">
+                    A-line, shift, or empire-waist dresses gracefully skim your midsection.
+                </p>
+                </div>
+
+                {/* Outdoor */}
+                <div className="p-5 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                <div className="flex items-center gap-2 mb-2">
+                    <IoShirtOutline className="text-xl text-heading" />
+                    <h4 className="font-semibold text-heading">Outdoor</h4>
+                </div>
+                <p className="text-sm text-text">
+                    Light layers and flowy jackets add balance and draw attention upward.
+                </p>
+                </div>
+
+                {/* Bottom */}
+                <div className="p-5 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                <div className="flex items-center gap-2 mb-2">
+                    <IoShirtOutline className="text-xl text-heading" />
+                    <h4 className="font-semibold text-heading">Bottom</h4>
+                </div>
+                <p className="text-sm text-text">
+                    Wide-leg pants or bootcut jeans balance proportions and flatter curves.
+                </p>
+                </div>
+            </div>
+            </div>
+
 
                 {/* Outfit Recommendation */}
                 {/* The layout will be 3 cards with continuous arrows for user to click

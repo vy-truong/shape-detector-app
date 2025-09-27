@@ -3,23 +3,21 @@
 @theme {
   /* 🎨 Colors */
   --color-bg: hsl(38 52% 96%);
-  /* --color-text: hsl(0 0% 24%); */
-  --color-text: hsl(120 24% 6%);
+  --color-mutedlight: hsl(0 0% 90%); /*lighter cool*/
+  --color-mutedwarm: hsl(38 70% 98%); /*lighter warm*/
+  /* not important text */
   
 
   /* --color-heading: hsl(206 48% 40%); */
   --color-heading: hsl(211 45% 42%); 
-  --color-heading-hl: hsl(206 48% 60%); /*lighter hover blue*/
-  --color-heading-hd: hsl(206 48% 30%); 
-  /* darker blue for hover */
+  --color-heading-hl: hsl(211 48% 60%); /*lighter hover blue*/
+  --color-heading-hd: hsl(211 48% 38%); 
 
-  /* --color-accent: hsl(50 100% 86%); */
-  /* --color-accent-hover: hsl(45 100% 80%); */
+  /* Normal text */
+  --color-text2: hsl(120 24% 6%);
+  --color-text1: hsl(120 24% 20%);
+  --color-text: hsl(0 0% 16%);
 
-  /* --color-muted: hsl(0 0% 40%); */
-  /* --color-muted-2: hsl(0 0% 55%); lighter muted */
-  
-  /* --color-border: hsl(0 0% 85%); */ 
 
   
   
@@ -47,9 +45,11 @@
     /* 🌑 Drop shadow (classic material style) */
   --shadow-drop: 0 8px 20px rgba(0, 0, 0, 0.15);
 
-  /* 🌕 Inner shadow (neumorphism feel) */
-  --shadow-inner: inset 4px 4px 8px rgba(0, 0, 0, 0.15),
-  inset -4px -4px 8px rgba(255, 255, 255, 0.8);
+/* 🌕 Inner shadow (subtle neumorphism) */
+--shadow-inner: 
+  inset 2px 2px 5px rgba(0, 0, 0, 0.08),
+  inset -2px -2px 5px rgba(255, 255, 255, 0.6);
+
 
   /* 🌗 Combo: inner + drop (soft neumorphism depth) */
   --shadow-combo: 
