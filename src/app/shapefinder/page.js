@@ -223,216 +223,209 @@ export default function ShapeFinder() {
         </form>
         {error && <p className="text-red-500 mt-4">{error}</p>}
     </section>
+    {/* ===================== Result Overview ===================== */}
+{bodyShape && (
+  <section className="bg-white rounded-lg p-6 sm:p-10 space-y-8 mb-12 w-full shadow-sm">
+    {/* Body Shape Title */}
+    <h2 className="text-lg sm:text-2xl font-fraunces font-bold italic">
+      You have <span className="text-heading">{bodyShape}</span> body shape
+    </h2>
 
-        {/* Result */}
-        {bodyShape && (
-        <section className="bg-white rounded-lg p-5 sm:px-10 py-20 space-y-6">
-            <h2 className="text-lg sm:text-2xl font-fraunces font-bold italic mb-[3rem]">
-                You have{" "}
-                <span className="text-heading">
-                    {bodyShape}
-                </span>{" "}
-                body shape
-            </h2>
-            
-            {/* RATIO SECTION */}
-            <section className="p-6 rounded-lg bg-shadow-md bg-mutedwarm">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 text-center">
-                {/* Bust */}
-                <div>
-                <p className="text-text text-sm tracking-wide mb-[0.5rem]">Bust</p>
-                <p className="text-2xl font-semibold  text-heading mt-[0.5rem]">
-                    {bust}{units}
-                </p>
-                </div>
+    {/* Ratios */}
+    <section className="p-6 rounded-lg bg-mutedwarm shadow-sm">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 text-center">
+        {/* Bust */}
+        <div>
+          <p className="text-text text-sm tracking-wide mb-[0.5rem]">Bust</p>
+          <p className="text-2xl font-semibold text-heading mt-[0.5rem]">
+            {bust}{units}
+          </p>
+        </div>
 
-                {/* Waist */}
-                <div>
-                <p className="text-text text-sm tracking-wide mb-[0.5rem]">Waist</p>
-                <p className="text-2xl font-semibold text-heading mt-[0.5rem]">
-                    {waist}{units}
-                </p>
-                </div>
+        {/* Waist */}
+        <div>
+          <p className="text-text text-sm tracking-wide mb-[0.5rem]">Waist</p>
+          <p className="text-2xl font-semibold text-heading mt-[0.5rem]">
+            {waist}{units}
+          </p>
+        </div>
 
-                {/* Hip */}
-                <div>
-                <p className="text-text text-sm tracking-wide mb-[0.5rem]">Hip</p>
-                <p className="text-2xl font-semibold text-heading mt-[0.5rem]">
-                    {hip}{units}
-                </p>
-                </div>
+        {/* Hip */}
+        <div>
+          <p className="text-text text-sm tracking-wide mb-[0.5rem]">Hip</p>
+          <p className="text-2xl font-semibold text-heading mt-[0.5rem]">
+            {hip}{units}
+          </p>
+        </div>
 
-                {/* Bust/Hip Ratio */}
-                <div>
-                <p className="text-text text-sm tracking-wide mb-[0.5rem]">Bust/Hip Ratio</p>
-                <p className="text-2xl font-semibold text-heading mt-[0.5rem]">
-                    {(bust / hip).toFixed(2)}
-                </p>
-                </div>
-            </div>
+        {/* Bust/Hip Ratio */}
+        <div>
+          <p className="text-text text-sm tracking-wide mb-[0.5rem]">Bust/Hip Ratio</p>
+          <p className="text-2xl font-semibold text-heading mt-[0.5rem]">
+            {(bust / hip).toFixed(2)}
+          </p>
+        </div>
+      </div>
 
-            <hr className="my-6" />
+      <hr className="my-6" />
 
-            {/* Extra ratios */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 text-center">
-                <div>
-                <p className="text-text text-sm tracking-wide mb-[0.5rem]">Waist/Bust Ratio</p>
-                <p className="text-xl font-semibold text-heading mt-[0.5rem]">
-                    {(waist / bust).toFixed(2)}
-                </p>
-                </div>
-                <div>
-                <p className="text-text text-sm tracking-wide mb-[0.5rem]">Waist/Hip Ratio</p>
-                <p className="text-xl font-semibold text-heading mt-[0.5rem]">
-                    {(waist / hip).toFixed(2)}
-                </p>
-                </div>
-                <div>
-                <p className="text-text text-sm tracking-wide mb-[0.5rem]">Bust-Hip Difference</p>
-                <p className="text-xl font-semibold text-heading mt-[0.5rem]">
-                    {(bust - hip).toFixed(1)} {units}
-                </p>
-                </div>
-            </div>
-            </section>
+      {/* Extra Ratios */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 text-center">
+        <div>
+          <p className="text-text text-sm tracking-wide mb-[0.5rem]">Waist/Bust Ratio</p>
+          <p className="text-xl font-semibold text-heading mt-[0.5rem]">
+            {(waist / bust).toFixed(2)}
+          </p>
+        </div>
+        <div>
+          <p className="text-text text-sm tracking-wide mb-[0.5rem]">Waist/Hip Ratio</p>
+          <p className="text-xl font-semibold text-heading mt-[0.5rem]">
+            {(waist / hip).toFixed(2)}
+          </p>
+        </div>
+        <div>
+          <p className="text-text text-sm tracking-wide mb-[0.5rem]">Bust-Hip Difference</p>
+          <p className="text-xl font-semibold text-heading mt-[0.5rem]">
+            {(bust - hip).toFixed(1)} {units}
+          </p>
+        </div>
+      </div>
+    </section>
 
-            {/* Shape Explanation */}
-            <div className="bg-mutedwarm p-6 rounded-lg shadow-sm">
-            <p className="text-text leading-relaxed">
-                {shapeExplanations[bodyShape].text}
-            </p>
-            </div>
-            {/* Styling Principles */}
-            <div className="bg-white p-4 rounded-md">
-                <h3  className="font-semibold mb-2">✨ Key Styling Principles</h3>
-                <ul className="list-disc pl-6 text-gray-700 space-y-1">
-                    <li>Highlight your waistline with tailored pieces</li>
-                    <li>Balance proportions with structured tops</li>
-                    <li>Experiment with A-line skirts and wide-leg pants</li>
-                </ul>
-            </div>
+    {/* Shape Explanation */}
+    <div className="bg-mutedwarm p-6 rounded-lg shadow-sm">
+      <p className="text-text leading-relaxed">
+        {shapeExplanations[bodyShape].text}
+      </p>
+    </div>
 
-               {/* Curated Style Guide */}
-            <div>
-            <h3 className="text-lg sm:text-2xl font-fraunces font-bold italic mb-[3rem]">Curated Style Guide</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                
-                {/* Top */}
-                <div className="p-5 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer">
-                <div className="flex items-center gap-2 mb-2">
-                    <IoShirtOutline className="text-xl text-heading" />
-                    <h4 className="font-semibold text-heading">Top</h4>
-                </div>
-                <p className="text-sm text-text">
-                    Flowing tops like tunics, V-necks, and empire-waist blouses create a flattering vertical line.
-                </p>
-                </div>
+    {/* Key Styling Principles */}
+    <div className="bg-white p-6 rounded-lg shadow-sm">
+      <h3 className="font-fraunces text-heading text-lg mb-4 flex items-center gap-2">
+        <span className="text-accent">✨</span>
+        Key Styling Principles
+      </h3>
+      <ul className="space-y-2 text-text">
+        <li>Highlight your waistline with tailored pieces</li>
+        <li>Balance proportions with structured tops</li>
+        <li>Experiment with A-line skirts and wide-leg pants</li>
+      </ul>
+    </div>
+  </section>
+)}
 
-                {/* Dress */}
-                <div className="p-5 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer">
-                <div className="flex items-center gap-2 mb-2">
-                    <IoShirtOutline className="text-xl text-heading" />
-                    <h4 className="font-semibold text-heading">Dress</h4>
-                </div>
-                <p className="text-sm text-text">
-                    A-line, shift, or empire-waist dresses gracefully skim your midsection.
-                </p>
-                </div>
+{/* ===================== Style Guide + Outfit Section ===================== */}
+{bodyShape && (
+  <section className="max-w-6xl mx-auto space-y-12">
+    {/* Curated Style Guide */}
+    <div>
+      <h3 className="text-lg sm:text-2xl font-fraunces font-bold italic mb-6">
+        Curated Style Guide
+      </h3>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {/* Top */}
+        <div className="p-5 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+          <div className="flex items-center gap-2 mb-2">
+            <IoShirtOutline className="text-xl text-heading" />
+            <h4 className="font-semibold text-heading">Top</h4>
+          </div>
+          <p className="text-sm text-text">
+            Flowing tops like tunics, V-necks, and empire-waist blouses create a flattering vertical line.
+          </p>
+        </div>
 
-                {/* Outdoor */}
-                <div className="p-5 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer">
-                <div className="flex items-center gap-2 mb-2">
-                    <IoShirtOutline className="text-xl text-heading" />
-                    <h4 className="font-semibold text-heading">Outdoor</h4>
-                </div>
-                <p className="text-sm text-text">
-                    Light layers and flowy jackets add balance and draw attention upward.
-                </p>
-                </div>
+        {/* Dress */}
+        <div className="p-5 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+          <div className="flex items-center gap-2 mb-2">
+            <IoShirtOutline className="text-xl text-heading" />
+            <h4 className="font-semibold text-heading">Dress</h4>
+          </div>
+          <p className="text-sm text-text">
+            A-line, shift, or empire-waist dresses gracefully skim your midsection.
+          </p>
+        </div>
 
-                {/* Bottom */}
-                <div className="p-5 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer">
-                <div className="flex items-center gap-2 mb-2">
-                    <IoShirtOutline className="text-xl text-heading" />
-                    <h4 className="font-semibold text-heading">Bottom</h4>
+        {/* Outdoor */}
+        <div className="p-5 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+          <div className="flex items-center gap-2 mb-2">
+            <IoShirtOutline className="text-xl text-heading" />
+            <h4 className="font-semibold text-heading">Outdoor</h4>
+          </div>
+          <p className="text-sm text-text">
+            Light layers and flowy jackets add balance and draw attention upward.
+          </p>
+        </div>
+
+        {/* Bottom */}
+        <div className="p-5 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+          <div className="flex items-center gap-2 mb-2">
+            <IoShirtOutline className="text-xl text-heading" />
+            <h4 className="font-semibold text-heading">Bottom</h4>
+          </div>
+          <p className="text-sm text-text">
+            Wide-leg pants or bootcut jeans balance proportions and flatter curves.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    {/* Outfit Recommendation */}
+    <div>
+      <h3 className="font-fraunces text-lg sm:text-2xl font-bold italic mb-6">
+        Outfit Recommendation
+      </h3>
+      <div className="relative">
+        {/* Left Arrow */}
+        <button
+          className="absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow-md rounded-full p-2 z-10"
+          onClick={scrollLeft}
+        >
+          <IoIosArrowBack size={20} />
+        </button>
+
+        {/* Carousel */}
+        <div
+          id="carousel"
+          ref={carouselRef}
+          className="flex overflow-x-auto space-x-4 scroll-smooth scrollbar-hide"
+        >
+          {products
+            .filter(
+              (product) =>
+                filter === "all" ||
+                filter === "filter" ||
+                product.category.toLowerCase() === filter.toLowerCase()
+            )
+            .map((product, index) => (
+              <div
+                key={index}
+                className="min-w-[220px] bg-white rounded-lg shadow-md flex-shrink-0"
+              >
+                <img
+                  src={product.image}
+                  alt={product.category}
+                  className="rounded-t-lg h-40 w-full object-cover"
+                />
+                <div className="p-3">
+                  <p className="font-medium text-sm">{product.category}</p>
+                  <p className="text-xs text-gray-600">{product.description}</p>
                 </div>
-                <p className="text-sm text-text">
-                    Wide-leg pants or bootcut jeans balance proportions and flatter curves.
-                </p>
-                </div>
-            </div>
-            </div>
+              </div>
+            ))}
+        </div>
 
+        {/* Right Arrow */}
+        <button
+          className="absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow-md rounded-full p-2 z-10"
+          onClick={scrollRight}
+        >
+          <IoIosArrowForward size={20} />
+        </button>
+      </div>
+    </div>
+  </section>
+)}
 
-                {/* Outfit Recommendation */}
-                {/* The layout will be 3 cards with continuous arrows for user to click
-                - The card will have images of clothing piece 
-                - The card will show clothing category: top or shirt etc 
-                - outdoor indoor casual work etc 
-                - short explantion what it will help that body type. for example: help create an illusion of something 
-                */}
-            <div className="mb-3">
-                {/* Arrow */}
-
-                <h3 className="font-bold text-lg mb-3">Outfit Recommendation</h3>
-                {/* drop down will be here */}
-                <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-                    <option value="filter">Filter</option>
-                    <option value="all">All</option>
-                    <option value="top">Top</option>
-                    <option value="bottom">Bottom</option>
-                    <option value="skirt">Skirt</option>
-                    <option value="dress">Dress</option>
-                </select>
-
-                <div className="relative">
-                    <button className="absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow-md rounded-full p-2 z-10" 
-                    onClick={scrollLeft}>
-                        <IoIosArrowBack size={20} />
-                        </button>
-                    <div
-                        id="carousel"
-                        ref={carouselRef}
-                        className="flex overflow-x-auto space-x-4 scroll-smooth scrollbar-hide"
-                    >
-                        <h4 className="font-semibold mb-2">Top</h4>
-                        {products
-                            .filter( product => 
-                                filter === "all" || filter === "filter" || product.category.toLowerCase() === filter.toLowerCase()
-                            )
-                            .map((product, index) => (  
-                            <div
-                            key={index}
-                            className="min-w-[220px] bg-white border rounded-lg shadow-md flex-shrink-0"
-                            >
-                                
-                            <img
-                                src={product.image}
-                                alt={product.category}
-                                className="rounded-t-lg h-40 w-full object-cover"
-                            />
-                            <div className="p-3">
-                                <p className="font-medium text-sm">
-                                {product.category}
-                                </p>
-                                <p className="text-xs text-gray-600">{product.description}</p>
-                            </div>
-                            </div>
-                            
-                        ))}
-                        
-                    </div>
-                    <button 
-                        className="absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow-md rounded-full p-2 z-10" 
-                        onClick={scrollRight}
-                        >
-                        <IoIosArrowForward size={20} />
-                    </button>
-                </div>
-            </div>
-            
-        </section>
-        )}
         
 
     </main>
