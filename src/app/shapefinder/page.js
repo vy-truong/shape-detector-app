@@ -111,128 +111,134 @@ export default function ShapeFinder() {
     //show reswult 
     //pick products based on clothing category using array filter 
 
+    const handleSave = (e) => {
+      e.preventDefault(); 
+      setError("");
+    }
     return (
-    <main className="bg-bg text-text max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 space-y-12 sm:space-y-16">
-
+    <main className="bg-bg text-text overflow-x-hidden w-full">
     {/* Header Section */}
-    <section className="text-center">
-      <h3 className="text-xl sm:text-3xl md:text-4xl font-fraunces font-light italic text-heading mb-6">
-        Shape Finder Calculation
-      </h3>
-      <p className="text-muted max-w-2xl mx-auto text-lg">
-        No more staring at your closet wondering what actually works for you. <br/>
-        Find outfits that flatter your shape, bring out your confidence, 
-        and make getting dressed feel effortless—and even exciting.
-      </p>
-    </section>
-
-    {/* Measurement Form */}
-    
-    <section className="bg-heading-hl rounded-xl shadow-drop px-[5rem] py-[2rem] sm:px-[4rem] sm:py-[3rem]"> 
-        <h2 className="text-2xl text-center text-white font-fraunces font-light mb-4">
-            Your Measurement
-        </h2>
-        <p className="text-mutedlight text-center text-sm sm:text-base mb-6">
-            Please measure around the fullest part of each area while standing straight.
+    <section className="bg-heading-hl w-full overflow-x-hidden"> 
+      <div className="text-center mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-12 sm:pt-20">
+        <h3 className="text-xl sm:text-3xl md:text-4xl font-fraunces font-light italic text-mutedlight mb-6">
+          Shape Finder Calculation
+        </h3>
+        <p className="text-mutedlight text-center sm:text-md leading-relaxed">
+          No more staring at your closet wondering what actually works for you. <br/>
+          Find outfits that flatter your shape, bring out your confidence, 
+          and make getting dressed feel effortless and even exciting.
         </p>
-        <form  onSubmit={handleSubmit} className="space-y-4">
-            {/* Unit Radio button*/}
-            <div className="flex justify-center mt-[1.5rem] mb-[1.5rem]"> 
-                <div className="flex bg-mutedlight rounded-full py-2 px-4">
+      </div>
+      {/* Measurement Form */}
+      <section className="bg-heading-hl w-full overflow-x-hidden px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6 sm:p-10 overflow-hidden">  
+            <h2 className="text-2xl text-center text-heading font-fraunces font-light mb-4">
+                Your Measurement
+            </h2>
+            <p className="text-heading text-center text-sm sm:text-base mb-6">
+                Please measure around the fullest part of each area while standing straight.
+            </p>
+              <form  onSubmit={handleSubmit} className="space-y-4">
+                {/* Unit Radio button*/}
+                <div className="flex justify-center mt-[1.5rem] mb-[1.5rem]"> 
+                    <div className="flex bg-mutedlight rounded-full py-2 px-4">
+                        <button
+                        type="button"
+                        onClick={() => setUnits("cm")}
+                        className={`px-6 py-2 rounded-full text-sm font-medium transition ${
+                            units === "cm"
+                            ? "bg-heading text-white"
+                            : "text-heading hover:bg-white"
+                        }`}
+                        >
+                        cm
+                        </button>
+
+                        <button
+                        type="button"
+                        onClick={() => setUnits("in")}
+                        className={`px-6 py-1 rounded-full text-sm font-medium transition ${
+                            units === "in"
+                            ? "bg-heading text-white"
+                            : "text-heading hover:bg-gray-200"
+                        }`}
+                        >
+                        in
+                        </button>
+                    </div>
+                </div>
+
+                {/* Body measuremet */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-[2rem] max-w-xl mx-auto">
+                    <div className="flex flex-col gap-1">
+                        <label className="font-medium">Bust</label>
+                        <input
+                        type="number"
+                        placeholder="Bust"
+                        value={bust}
+                        onChange={(e) => setBust(e.target.value)}
+                        className="shadow-combo bg-bg px-4 py-2 rounded-md w-full"
+                        />
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                        <label className="font-medium">Waist</label>
+                        <input
+                        type="number"
+                        placeholder="Waist"
+                            value={waist}
+                            onChange={(e) => setWaist(e.target.value)}
+                        className="shadow-combo bg-bg px-4 py-2 rounded-md"
+                        />
+                    </div> 
+
+                    <div className="flex flex-col gap-1">
+                        <label className="font-medium">High-hip</label>
+                        <input
+                        type="number"
+                        placeholder="High Hip"
+                        value={highHip}
+                        onChange={(e) => setHighHip(e.target.value)}
+                        className="shadow-combo bg-bg px-4 py-2 rounded-md"
+                        />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                        <label className="font-medium">Hip</label>
+                        <input
+                        type="number"
+                        placeholder="Hip"
+                        value={hip}
+                        onChange={(e) => setHip(e.target.value)}
+                        className=" shadow-combo bg-bg px-4 py-2 rounded-md"
+                        />
+                    </div>
+                </div>
+                <div/>
+                <div className="flex justify-center mt-[3rem]">
                     <button
-                    type="button"
-                    onClick={() => setUnits("cm")}
-                    className={`px-6 py-2 rounded-full text-sm font-medium transition ${
-                        units === "cm"
-                        ? "bg-heading text-white"
-                        : "text-heading hover:bg-gray-200"
-                    }`}
+                        type="submit"
+                        className="w-80 text-center bg-heading text-white py-3 rounded-md font-semibold hover:bg-heading-hl transition"
                     >
-                    cm
-                    </button>
-
-                    <button
-                    type="button"
-                    onClick={() => setUnits("in")}
-                    className={`px-6 py-1 rounded-full text-sm font-medium transition ${
-                        units === "in"
-                        ? "bg-heading text-white"
-                        : "text-heading hover:bg-gray-200"
-                    }`}
-                    >
-                    in
+                        Get result
                     </button>
                 </div>
+              </form>
             </div>
-
-
-            {/* Body measuremet */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-[2rem] max-w-xl mx-auto">
-                <div className="flex flex-col gap-1">
-                    <label className="font-medium">Bust</label>
-                    <input
-                    type="number"
-                    placeholder="Bust"
-                    value={bust}
-                    onChange={(e) => setBust(e.target.value)}
-                    className="shadow-combo bg-bg px-4 py-2 rounded-md w-full"
-                    />
-                </div>
-
-                <div className="flex flex-col gap-1">
-                    <label className="font-medium">Waist</label>
-                    <input
-                    type="number"
-                    placeholder="Waist"
-                        value={waist}
-                        onChange={(e) => setWaist(e.target.value)}
-                    className="shadow-combo bg-bg px-4 py-2 rounded-md"
-                    />
-                </div> 
-
-                <div className="flex flex-col gap-1">
-                    <label className="font-medium">High-hip</label>
-                    <input
-                    type="number"
-                    placeholder="High Hip"
-                    value={highHip}
-                    onChange={(e) => setHighHip(e.target.value)}
-                    className="shadow-combo bg-bg px-4 py-2 rounded-md"
-                    />
-                </div>
-                <div className="flex flex-col gap-1">
-                    <label className="font-medium">Hip</label>
-                    <input
-                    type="number"
-                    placeholder="Hip"
-                    value={hip}
-                    onChange={(e) => setHip(e.target.value)}
-                    className=" shadow-combo bg-bg px-4 py-2 rounded-md"
-                    />
-                </div>
-            </div>
-            <div/>
-            <div className="flex justify-center mt-[3rem]">
-                <button
-                    type="submit"
-                    className="w-80 text-center bg-heading text-white py-3 rounded-md font-semibold hover:bg-heading-hd transition"
-                >
-                    Get result
-                </button>
-            </div>
-        </form>
-        {error && <p className="text-red-500 mt-4">{error}</p>}
+    
+          {error && <p className="text-red-500 mt-4">{error}</p>}
+      </section>
     </section>
     {/* ===================== Result Overview ===================== */}
 {bodyShape && (
-  <section className="bg-white rounded-lg p-6 sm:p-10 space-y-8 mb-12 w-full shadow-sm">
+  <section className="bg-white rounded-lg py-15 p-6 sm:p-10 sm:py-20 space-y-8 mb-12 w-full shadow-sm overflow-x-hidden">
+    <div className="mx-auto"> 
     {/* Body Shape Title */}
-    <h2 className="text-lg sm:text-2xl font-fraunces font-bold italic">
+    <h2 className="text-2xl font-fraunces font-bold">
       You have <span className="text-heading">{bodyShape}</span> body shape
     </h2>
 
     {/* Ratios */}
-    <section className="p-6 rounded-lg bg-mutedwarm shadow-sm">
+    <section className="p-6 rounded-lg bg-mutedwarm shadow-sm overflow-hidden">
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 text-center">
         {/* Bust */}
         <div>
@@ -311,123 +317,140 @@ export default function ShapeFinder() {
         <li>Experiment with A-line skirts and wide-leg pants</li>
       </ul>
     </div>
-  </section>
-)}
 
-{/* ===================== Style Guide + Outfit Section ===================== */}
-{bodyShape && (
-  <section className="max-w-6xl mx-auto space-y-12">
-    {/* Curated Style Guide */}
-    <div>
-      <h3 className="text-lg sm:text-2xl font-fraunces font-bold italic mb-6">
-        Curated Style Guide
-      </h3>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {/* Top */}
-        <div className="p-5 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer">
-          <div className="flex items-center gap-2 mb-2">
-            <IoShirtOutline className="text-xl text-heading" />
-            <h4 className="font-semibold text-heading">Top</h4>
+      {/* ===================== Style Guide + Outfit Section ===================== */}
+  
+      <section className="max-w-6xl mx-auto space-y-12 px-4 sm:px-6 lg:px-8 overflow-x-hidden">
+      {/* Curated Style Guide */}
+      <div>
+        <h3 className="text-lg sm:text-2xl font-fraunces font-bold italic mb-6">
+          Curated Style Guide
+        </h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {/* Top */}
+          <div className="p-5 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+            <div className="flex items-center gap-2 mb-2">
+              <IoShirtOutline className="text-xl text-heading" />
+              <h4 className="font-semibold text-heading">Top</h4>
+            </div>
+            <p className="text-sm text-text">
+              Flowing tops like tunics, V-necks, and empire-waist blouses create a flattering vertical line.
+            </p>
           </div>
-          <p className="text-sm text-text">
-            Flowing tops like tunics, V-necks, and empire-waist blouses create a flattering vertical line.
-          </p>
-        </div>
 
-        {/* Dress */}
-        <div className="p-5 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer">
-          <div className="flex items-center gap-2 mb-2">
-            <IoShirtOutline className="text-xl text-heading" />
-            <h4 className="font-semibold text-heading">Dress</h4>
+          {/* Dress */}
+          <div className="p-5 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+            <div className="flex items-center gap-2 mb-2">
+              <IoShirtOutline className="text-xl text-heading" />
+              <h4 className="font-semibold text-heading">Dress</h4>
+            </div>
+            <p className="text-sm text-text">
+              A-line, shift, or empire-waist dresses gracefully skim your midsection.
+            </p>
           </div>
-          <p className="text-sm text-text">
-            A-line, shift, or empire-waist dresses gracefully skim your midsection.
-          </p>
-        </div>
 
-        {/* Outdoor */}
-        <div className="p-5 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer">
-          <div className="flex items-center gap-2 mb-2">
-            <IoShirtOutline className="text-xl text-heading" />
-            <h4 className="font-semibold text-heading">Outdoor</h4>
+          {/* Outdoor */}
+          <div className="p-5 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+            <div className="flex items-center gap-2 mb-2">
+              <IoShirtOutline className="text-xl text-heading" />
+              <h4 className="font-semibold text-heading">Outdoor</h4>
+            </div>
+            <p className="text-sm text-text">
+              Light layers and flowy jackets add balance and draw attention upward.
+            </p>
           </div>
-          <p className="text-sm text-text">
-            Light layers and flowy jackets add balance and draw attention upward.
-          </p>
-        </div>
 
-        {/* Bottom */}
-        <div className="p-5 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer">
-          <div className="flex items-center gap-2 mb-2">
-            <IoShirtOutline className="text-xl text-heading" />
-            <h4 className="font-semibold text-heading">Bottom</h4>
+          {/* Bottom */}
+          <div className="p-5 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+            <div className="flex items-center gap-2 mb-2">
+              <IoShirtOutline className="text-xl text-heading" />
+              <h4 className="font-semibold text-heading">Bottom</h4>
+            </div>
+            <p className="text-sm text-text">
+              Wide-leg pants or bootcut jeans balance proportions and flatter curves.
+            </p>
           </div>
-          <p className="text-sm text-text">
-            Wide-leg pants or bootcut jeans balance proportions and flatter curves.
-          </p>
         </div>
       </div>
-    </div>
+        {/* Outfit Recommendation */}
+        <section className="w-full bg-mutedwarm py-12 overflow-x-hidden">
+        <h3 className="font-fraunces text-lg sm:text-2xl font-bold italic mb-6">
+          Outfit Recommendation
+        </h3>
+        <div className="relative w-full overflow-hidden">
+          {/* Left Arrow */}
+          <button
+            className="absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow-md rounded-full p-2 z-10"
+            onClick={scrollLeft}
+          >
+            <IoIosArrowBack size={30} />
+          </button>
 
-    {/* Outfit Recommendation */}
-    <div>
-      <h3 className="font-fraunces text-lg sm:text-2xl font-bold italic mb-6">
-        Outfit Recommendation
-      </h3>
-      <div className="relative">
-        {/* Left Arrow */}
-        <button
-          className="absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow-md rounded-full p-2 z-10"
-          onClick={scrollLeft}
-        >
-          <IoIosArrowBack size={20} />
-        </button>
+          {/* Carousel */}
+          <div
+            id="carousel"
+            ref={carouselRef}
+            className="flex overflow-x-auto space-x-6 scroll-smooth scrollbar-hide px-2 max-w-full"
+          >
+            {products
+              .filter(
+                (product) =>
+                  filter === "all" ||
+                  filter === "filter" ||
+                  product.category.toLowerCase() === filter.toLowerCase()
+              )
+              .map((product, index) => (
+                <div
+                  key={index}
+                  className="min-w-[220px] max-w-[240px] bg-white rounded-lg shadow-md flex-shrink-0 overflow-hidden hover:shadow-lg transition"
+                >
+                  {/* Image container */}
+                  <div className="h-44 flex items-center justify-center bg-white">
+                    <img
+                      src={product.image}
+                      alt={product.category}
+                      className="max-h-full max-w-full object-contain"
+                    />
+                  </div>
 
-        {/* Carousel */}
-        <div
-          id="carousel"
-          ref={carouselRef}
-          className="flex overflow-x-auto space-x-4 scroll-smooth scrollbar-hide"
-        >
-          {products
-            .filter(
-              (product) =>
-                filter === "all" ||
-                filter === "filter" ||
-                product.category.toLowerCase() === filter.toLowerCase()
-            )
-            .map((product, index) => (
-              <div
-                key={index}
-                className="min-w-[220px] bg-white rounded-lg shadow-md flex-shrink-0"
-              >
-                <img
-                  src={product.image}
-                  alt={product.category}
-                  className="rounded-t-lg h-40 w-full object-cover"
-                />
-                <div className="p-3">
-                  <p className="font-medium text-sm">{product.category}</p>
-                  <p className="text-xs text-gray-600">{product.description}</p>
+                  {/* Text */}
+                  <div className="p-3">
+                    <p className="text-lg font-semibold text-text mb-1">
+                      {product.category}
+                    </p>
+                    <p className="text-sm text-text1 leading-snug">
+                      {product.description}
+                    </p>
+                  </div>
                 </div>
-              </div>
             ))}
+          </div>
+
+          {/* Right Arrow */}
+          <button
+            className="absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow-md rounded-full p-2 z-10"
+            onClick={scrollRight}
+          >
+            <IoIosArrowForward size={30} />
+          </button>
         </div>
 
-        {/* Right Arrow */}
-        <button
-          className="absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow-md rounded-full p-2 z-10"
-          onClick={scrollRight}
+        </section>
+
+       <button
+        onClick={handleSave}
+        className="mb-10 p-6 py-2 bg-heading text-white rounded-md hover:bg-heading-hl"
         >
-          <IoIosArrowForward size={20} />
+          Save to Profile
         </button>
-      </div>
+
+            
+    </section>
     </div>
   </section>
 )}
 
-        
 
-    </main>
-    );
+  </main>
+  );
 }
