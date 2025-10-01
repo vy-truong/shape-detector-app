@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IoShirtOutline } from "react-icons/io5";
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 import { shapeExplanations } from "../data/shapeExplanations.js";
@@ -20,7 +20,14 @@ export default function ResultCard({
   if (!bodyShape) return null; // no shape yet? just render nothing
 
   const [filter, setFilter] = useState("all"); // filter is for categories (top, dress, etc)
+  const [results, setResults] = useState([]);
   const carouselRef = useRef(null); // grab carousel DOM to scroll programmatically
+
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem("results") || "[]");
+    setResults(stored);
+
+  }, []);
 
   // move carousel right
   const scrollRight = () => {
@@ -50,13 +57,21 @@ export default function ResultCard({
       hip: Number(hip),
       units,
       products,
+    }
+    const updated = [...results, newResult]; 
+    setResults(updated); 
+    localStorage.setItem("results", JSON.stringify(updated));
+    console.log("saved results:", updated);
     };
-    // load whatever is already saved
-    const existing = JSON.parse(localStorage.getItem("results") || "[]");
-    // push new result into array
-    localStorage.setItem("results", JSON.stringify([...existing, newResult]));
-  };
 
+
+    const loadResults = () => {
+      const stored = JSON.parse(localStorage.getItem("results") || "[]");
+      setResults(stored); // put into state
+      console.log("Loaded results:", stored);
+      
+    };
+    
   return (
     <section className="bg-white rounded-lg py-15 p-6 sm:p-10 sm:py-20 space-y-8 mb-12 w-full shadow-sm overflow-x-hidden">
       <div className="mx-auto">
@@ -159,55 +174,25 @@ export default function ResultCard({
 
         {/* ===== Curated guide + carousel ===== */}
         <section className="mx-auto mt-20 mb-1 px-4 sm:px-6 lg:px-8 overflow-x-hidden">
-          <div>
-            <h3 className="text-lg sm:text-2xl font-fraunces font-bold mb-6">
-              Curated Style Guide
+            <div>
+            <h3 className="text-lg sm:text-2xl font-fraunces font-bold italic mb-6">
+                Curated Style Guide
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
-              {/* hard-coded blocks rn, could be data-driven later */}
-              <div className="p-15 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer">
-                <div className="flex items-center gap-2 mb-2">
-                  <IoShirtOutline className="text-xl text-heading" />
-                  <h4 className="font-semibold text-heading">Top</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {styleGuides[bodyShape]?.map((item, idx) => (
+                <div
+                    key={idx}
+                    className="p-5 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                >
+                    <div className="flex items-center gap-2 mb-2">
+                    <IoShirtOutline className="text-xl text-heading" />
+                    <h4 className="font-semibold text-heading">{item.category}</h4>
+                    </div>
+                    <p className="text-sm text-text">{item.text}</p>
                 </div>
-                <p className="text-sm text-text">
-                  Flowing tops like tunics, V-necks, and empire-waist blouses
-                  create a flattering vertical line.
-                </p>
-              </div>
-              <div className="p-15 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer">
-                <div className="flex items-center gap-2 mb-2">
-                  <IoShirtOutline className="text-xl text-heading" />
-                  <h4 className="font-semibold text-heading">Dress</h4>
-                </div>
-                <p className="text-sm text-text">
-                  A-line, shift, or empire-waist dresses gracefully skim your
-                  midsection.
-                </p>
-              </div>
-              <div className="p-15 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer">
-                <div className="flex items-center gap-2 mb-2">
-                  <IoShirtOutline className="text-xl text-heading" />
-                  <h4 className="font-semibold text-heading">Outdoor</h4>
-                </div>
-                <p className="text-sm text-text">
-                  Light layers and flowy jackets add balance and draw attention
-                  upward.
-                </p>
-              </div>
-              <div className="p-15 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow cursor-pointer">
-                <div className="flex items-center gap-2 mb-2">
-                  <IoShirtOutline className="text-xl text-heading" />
-                  <h4 className="font-semibold text-heading">Bottom</h4>
-                </div>
-                <p className="text-sm text-text">
-                  Wide-leg pants or bootcut jeans balance proportions and flatter
-                  curves.
-                </p>
-              </div>
+                ))}
             </div>
-          </div>
-
+            </div>
           {/* outfit carousel */}
           <section className="w-full bg-mutedwarm py-12 overflow-x-hidden">
             <h3 className="font-fraunces text-lg sm:text-2xl font-bold italic mb-6">
@@ -289,14 +274,25 @@ export default function ResultCard({
           {/* save button only shows when flag is true */}
           {showSaveButton && (
             <button
-              onClick={onSave ?? defaultSave}
+              onClick={defaultSave}
               className="mb-10 p-6 py-2 bg-heading text-white rounded-md hover:bg-heading-hl"
             >
               Save to Profile
             </button>
+
           )}
+
+<button
+            onClick={loadResults}
+              className="mb-10 p-6 py-2 bg-heading text-white rounded-md hover:bg-heading-hl"
+            >
+              load to Profile
+            </button>
         </section>
       </div>
     </section>
-  );
-}
+  ); }
+
+  
+
+

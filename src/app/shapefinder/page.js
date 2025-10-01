@@ -26,6 +26,7 @@ function classifyShape(bust, waist, highHip, hip, units = "in") {
   }
 
 export default function ShapeFinder() {
+    
     // 1. create state for each body measurement and unit 
     //Default measurement to test, will remove later 
     const [bust, setBust] = useState(36);
@@ -45,21 +46,21 @@ export default function ShapeFinder() {
     const carouselRef = useRef(null); 
 
     // FILTER DROP DOWN USESTATE with default value "All" to show all products
-    const [filter, setFilter] = useState("all"); 
+    // const [filter, setFilter] = useState("all"); 
 
-    const scrollRight = () => {
+    // const scrollRight = () => {
 
-        if(carouselRef.current) {
-            carouselRef.current.scrollBy({ left: 250, behavior: "smooth" });
-        }
-    }
-    const scrollLeft = () => {
+    //     if(carouselRef.current) {
+    //         carouselRef.current.scrollBy({ left: 250, behavior: "smooth" });
+    //     }
+    // }
+    // const scrollLeft = () => {
 
-        if(carouselRef.current) {
-            carouselRef.current.scrollBy({ left: -250, behavior: "smooth" });
-        }
-        console.log("scroll left")
-    }
+    //     if(carouselRef.current) {
+    //         carouselRef.current.scrollBy({ left: -250, behavior: "smooth" });
+    //     }
+    //     console.log("scroll left")
+    // }
    
 
 
