@@ -90,19 +90,7 @@
     "description": "Wrap detail cinches the waist and creates a flattering neckline.",
     "bodytype": ["hourglass", "pear"]
   },
-  {
-    "id": 8,
-    "name": "Tailored Work Shirt",
-    "category": "top",
-    "style": "workwear",
-    "color": "light blue",
-    "brand": "Elm Avenue",
-    "price": 62.00,
-    "image": "/img/top-2.png",
-    "url": "/fake-database",
-    "description": "Classic shirt with a tailored fit that looks sharp and professional.",
-    "bodytype": ["rectangle", "apple"]
-  },
+
 
   {
     "id": 9,
@@ -158,7 +146,7 @@
   },
   {
     "id": 13,
-    "name": "Slim Fit Chinos",
+    "name": "Subtle flared Chinos",
     "category": "bottom",
     "style": "casual",
     "color": "khaki",
