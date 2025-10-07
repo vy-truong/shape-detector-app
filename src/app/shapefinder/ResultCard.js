@@ -64,13 +64,6 @@ export default function ResultCard({
     console.log("saved results:", updated);
     };
 
-
-    const loadResults = () => {
-      const stored = JSON.parse(localStorage.getItem("results") || "[]");
-      setResults(stored); // put into state
-      console.log("Loaded results:", stored);
-      
-    };
     
   return (
     <section className="bg-white rounded-lg py-15 p-6 sm:p-10 sm:py-20 space-y-8 mb-12 w-full shadow-sm overflow-x-hidden">
@@ -281,13 +274,6 @@ export default function ResultCard({
             </button>
 
           )}
-
-<button
-            onClick={loadResults}
-              className="mb-10 p-6 py-2 bg-heading text-white rounded-md hover:bg-heading-hl"
-            >
-              load to Profile
-            </button>
         </section>
       </div>
     </section>

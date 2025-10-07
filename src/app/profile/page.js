@@ -9,6 +9,7 @@ import ProfileHeader from "./ProfileHeader.js";
 import Footer from "../components/Footer.js";
 import ResultCard from "../shapefinder/ResultCard.js";
 
+
 export default function MyProfilePage() {
     const [latestResult, setLatestResult] = useState(null);
 
@@ -31,6 +32,8 @@ export default function MyProfilePage() {
             { latestResult ? <ResultCard {...latestResult}/> 
             : 
             <NoResultBox />}
+            
+            
             <Footer />
         </main>
         
