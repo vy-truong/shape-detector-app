@@ -1,6 +1,8 @@
 "use client";
 
+
 import { useEffect, useRef, useState } from "react";
+import  supabase  from "../config/supabaseClient"
 import { IoShirtOutline } from "react-icons/io5";
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 import { shapeExplanations } from "../data/shapeExplanations.js";
@@ -13,7 +15,7 @@ export default function ResultCard({
   highHip,
   hip,
   units = "in", // default to inches if not passed
-  products = [], // outfit recs
+  products = [], 
   showSaveButton = false, // only show on ShapeFinder page, not Profile
   onSave, // optional save fn, otherwise fallback to defaultSave
 }) {
@@ -22,12 +24,6 @@ export default function ResultCard({
   const [filter, setFilter] = useState("all"); // filter is for categories (top, dress, etc)
   const [results, setResults] = useState([]);
   const carouselRef = useRef(null); // grab carousel DOM to scroll programmatically
-
-  useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("results") || "[]");
-    setResults(stored);
-
-  }, []);
 
   // move carousel right
   const scrollRight = () => {
@@ -42,29 +38,49 @@ export default function ResultCard({
     }
   };
 
-  // fallback save if no onSave passed in
-  const defaultSave = () => {
+
+  const defaultSave = async (e) => {
+    e.preventDefault();
+  
     const newResult = {
-      id:
-        typeof crypto !== "undefined" && crypto.randomUUID
-          ? crypto.randomUUID() // nice uuid if available
-          : String(Date.now()), // fallback just use timestamp
-      createdAt: new Date().toISOString(),
-      bodyShape,
+      id: crypto.randomUUID(),
+      bodyshape: bodyShape,
       bust: Number(bust),
       waist: Number(waist),
-      highHip: Number(highHip),
+      highhip: Number(highHip),
       hip: Number(hip),
       units,
-      products,
-    }
-    const updated = [...results, newResult]; 
-    setResults(updated); 
-    localStorage.setItem("results", JSON.stringify(updated));
-    console.log("saved results:", updated);
+      products, 
     };
-
-    
+  
+    try {
+      const { data: savedResult, error: resultError } = await supabase
+        .from("saved_results")
+        .insert([newResult])
+        .select();
+  
+      if (resultError) throw resultError;
+  
+      console.log("Saved to Supabase:", savedResult[0]);
+      alert("Saved to your profile!");
+    } catch (err) {
+      console.error("⚠️ Supabase failed, saving locally:", err);
+  
+      // Fallback to localStorage
+      const stored = JSON.parse(localStorage.getItem("results") || "[]");
+      const fallback = {
+        ...newResult,
+        created_at: new Date(result.created_at).toLocaleString("en-CA", 
+          {
+          timeZone: "America/Edmonton",
+          }
+        )
+      };
+      localStorage.setItem("results", JSON.stringify([...stored, fallback]));
+      alert("Saved locally (offline mode).");
+    }
+  };
+  
   return (
     <section className="bg-white rounded-lg py-15 p-6 sm:p-10 sm:py-20 space-y-8 mb-12 w-full shadow-sm overflow-x-hidden">
       <div className="mx-auto">
@@ -267,7 +283,7 @@ export default function ResultCard({
           {/* save button only shows when flag is true */}
           {showSaveButton && (
             <button
-              onClick={defaultSave}
+              onClick= {(e) => defaultSave(e)}
               className="mb-10 p-6 py-2 bg-heading text-white rounded-md hover:bg-heading-hl"
             >
               Save to Profile

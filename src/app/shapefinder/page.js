@@ -7,6 +7,8 @@ import { IoIosArrowBack } from "react-icons/io";
 import  {shapeExplanations }  from "../data/shapeExplanations.js";
 import Header from "../components/Header.js";
 import ResultCard from "./ResultCard.js";
+import  supabase  from "../config/supabaseClient"
+// import { insertProducts } from "../utils/insertProducts";
 
 function classifyShape(bust, waist, highHip, hip, units = "in") {
     const small = units === "in" ? 2.0 : 5.0;
@@ -45,41 +47,46 @@ export default function ShapeFinder() {
     // Create IMAGE SLIDER useRef, stored in DOM element 
     const carouselRef = useRef(null); 
 
-    // FILTER DROP DOWN USESTATE with default value "All" to show all products
-    // const [filter, setFilter] = useState("all"); 
-
-    // const scrollRight = () => {
-
-    //     if(carouselRef.current) {
-    //         carouselRef.current.scrollBy({ left: 250, behavior: "smooth" });
-    //     }
-    // }
-    // const scrollLeft = () => {
-
-    //     if(carouselRef.current) {
-    //         carouselRef.current.scrollBy({ left: -250, behavior: "smooth" });
-    //     }
-    //     console.log("scroll left")
-    // }
-   
-
-
     //3. load data from json uing useeffect async 
     useEffect(() => {
-        async function loadProducts() {
-            try {
-                const res = await fetch("/products.json"); 
-                if(!res.ok) throw new Error("Failed to load products"); 
-                const data = await res.json();
-                setAllProducts(data); 
+      async function loadProducts() {
+        // console.log("Seeding products...");
+        // // this will push all your data into Supabase once
+        // await insertProducts();
 
-            } catch (err) {
-                console.error(err);
-                setError("Could not laod all products ")
-            }
+        //Then load from Supabase
+        try {
+          // 1️ Try loading from Supabase
+          const { data, error } = await supabase.from("products").select("*")
+    
+          if (error || !data || data.length === 0) {
+            console.warn("Supabase failed or empty. Falling back to local JSON...")
+            throw error || new Error("Empty Supabase data")
+          }
+    
+          console.log("Loaded products from Supabase:", data.length)
+          setAllProducts(data)
+    
+        } catch (err) {
+          // Fall back to local JSON
+          try {
+            const res = await fetch("/products.json")
+            if (!res.ok) throw new Error("Local JSON fetch failed")
+    
+            const localData = await res.json()
+            console.log("Loaded products from local file:", localData.length)
+            setAllProducts(localData)
+    
+          } catch (jsonErr) {
+            // 3️ Both failed
+            console.error("Could not load any products:", jsonErr)
+            setError("Could not load any products.")
+          }
         }
-        loadProducts(); 
-    }, []);
+      }
+    
+      loadProducts()
+    }, [])
 
     //4. handle form submit with warning and error handling 
     const handleSubmit = (e) => {
@@ -98,25 +105,29 @@ export default function ShapeFinder() {
             setSummary(
                 `Bust: ${bust} ${units} | Waist: ${waist} ${units} | High-Hip: ${highHip} ${units} | Hip: ${hip} ${units}`
               );
-    
-            const picks = allProducts.filter(
-            (p) => Array.isArray(p.bodytype) && 
-                    p.bodytype.map(bt => bt.toLowerCase()).includes(shape.toLowerCase())
-            );
-              
-              
-        setProducts(picks);
+
+            //Go through every product. Grab its bodyshape info.
+            const picks = allProducts.filter((p) => {
+              // Force convert bodyshape to plain JS array
+              //If it’s already an array, copy it.
+              const raw = p.bodyshape;
+              const shapes = Array.isArray(raw) 
+                            ? [...raw]  //If it’s already an array, copy it 
+                            : typeof raw === "string" //If it’s a string, clean and split it.
+                            ? raw.replace(/[{}"]/g, "").split(",")
+                            : []; //otherwise skip it by creating empty array 
+
+              //Then check if it includes detected body shape.
+              return shapes.map((s) => s.trim().toLowerCase()).includes(shape.toLowerCase()); 
+            });
+            console.log("Shape:", shape);
+            console.log("Matched products:", picks);
+            // alert(`Found ${picks.length} matching products for ${shape}`);
+            setProducts(picks);
 
     }
     console.log("Shape data:", shapeExplanations);
-    //empty  
-    //show reswult 
-    //pick products based on clothing category using array filter 
 
-    const handleSave = (e) => {
-      e.preventDefault(); 
-      setError("");
-    }
     return (
     <main className="bg-bg text-text overflow-x-hidden w-full">
     {/* Header Section */}
@@ -239,7 +250,8 @@ export default function ShapeFinder() {
           hip={hip}
           units={units}
           products={products}
-          showSaveButton
+          // products={filteredProducts}
+          showSaveButton={true}
           // onSave={saveToProfile}
         />
       )}
