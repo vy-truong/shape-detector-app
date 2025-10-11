@@ -8,10 +8,15 @@ import NoResultBox from "./NoResultBox.js";
 import ProfileHeader from "./ProfileHeader.js";
 import Footer from "../components/Footer.js";
 import ResultCard from "../shapefinder/ResultCard.js";
+import ProfileView from "./ProfileView";
+import WardrobeView from "./WardrobeView";
 
 
 export default function MyProfilePage() {
     const [latestResult, setLatestResult] = useState(null);
+
+    const [view, setView] = useState("profile"); //set view for pfp and wardrobe 
+
     useEffect(()=> {
         async function loadResults() {
             try {
@@ -25,7 +30,7 @@ export default function MyProfilePage() {
 
                 if (results && results.length > 0) {
                     const latest = results[0];
-                    console.log("✅ Loaded from Supabase:", latest);
+                    console.log("Loaded from Supabase:", latest);
                   
                     setLatestResult(latest); 
                 }
@@ -54,32 +59,51 @@ export default function MyProfilePage() {
 
     return (
         <main>
-            <ProfileHeader />
-
-            {latestResult ? (
-                <ResultCard
-                    bodyShape={latestResult.bodyshape}
-                    bust={latestResult.bust}
-                    waist={latestResult.waist}
-                    highHip={latestResult.highhip}
-                    hip={latestResult.hip}
-                    units={latestResult.units}
-                    products={latestResult.products || []}
-                    showSaveButton={false}
-                />) 
-                : 
-                (<NoResultBox />)
-            }
-            
-            
-            <Footer />
+          <ProfileHeader />
+    
+          <section className="bg-white min-h-screen">
+            <div className="max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-20 py-10">
+              {/* ===== Toggle Button ===== */}
+              <div className="flex justify-center mb-8">
+                <button
+                  onClick={() =>
+                    setView((prev) =>
+                      prev === "profile" ? "wardrobe" : "profile"
+                    )
+                  }
+                  className="bg-heading-hd text-white px-6 py-3 rounded-full hover:bg-heading-hl transition-all text-sm sm:text-base"
+                >
+                  {view === "profile" ? "Go to My Wardrobe" : "Back to Profile"}
+                </button>
+              </div>
+    
+              {/* ===== Toggle Views ===== */}
+              {view === "profile" ? (
+                <>
+                  {latestResult ? (
+                    <ResultCard
+                      bodyShape={latestResult.bodyshape}
+                      bust={latestResult.bust}
+                      waist={latestResult.waist}
+                      highHip={latestResult.highhip}
+                      hip={latestResult.hip}
+                      units={latestResult.units}
+                      products={latestResult.products || []}
+                      showSaveButton={false}
+                    />
+                  ) : (
+                    <NoResultBox />
+                  )}
+                </>
+              ) : (
+                <WardrobeView />
+              )}
+            </div>
+          </section>
+    
+          <Footer />
         </main>
-        
-
-        
-
-
-    );
+      );
   
 
 }
