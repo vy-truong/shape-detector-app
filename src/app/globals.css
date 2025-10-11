@@ -62,3 +62,7 @@
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.2), 
                0 4px 6px rgba(0, 0, 0, 0.1); /* more realistic */
 }
+.scrollbar-hide {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
