@@ -129,7 +129,7 @@ export default function ShapeFinder() {
     console.log("Shape data:", shapeExplanations);
 
     return (
-    <main className="bg-bg text-text overflow-x-hidden w-full">
+    <main className=" text-text w-full">
     {/* Header Section */}
     <section className="bg-heading-hl w-full overflow-x-hidden"> 
       <div className="text-center mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-12 sm:pt-20">
