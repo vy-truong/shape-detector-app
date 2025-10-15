@@ -13,11 +13,11 @@ export default function WardrobeView() {
   const [title, setTitle ] = useState(""); 
   const [category, setCategory] = useState("top");
   const [style, setStyle] = useState(["Work"]); 
+  const [updateImages, setUpdateImages] = useState([]); 
+  const [deleteImages, setDeleteImages] = useState(false); 
 
   //filter
   const [selectedFilter, setSelectedFilter] = useState("All"); 
-
-
 
   const [pendingImage, setPendingImage ] = useState(null); 
   const [openModal, setOpenModal] = useState(false); 
@@ -49,7 +49,7 @@ export default function WardrobeView() {
   }, [images]);
 
 
-   // -------------------- STEP 3: HANDLE IMAGE UPLOAD --------------------
+// -------------------- STEP 3: HANDLE IMAGE UPLOAD --------------------
 //convert upload img into supabase file and store its URL
 const handleUpload = async (e) => {
   const files = Array.from(e.target.files);
@@ -102,8 +102,31 @@ const handleUpload = async (e) => {
     setPendingImage(null);
     setOpenModal(false);
     setTitle("");
-    setStyle("Work");
+    setStyle(["Work"]);
   };
+  
+    // handle delete image
+    const handleDeleteImage = async (imgId, imgPath) => {
+      try {
+        // delete from Supabase bucket
+        const { error } = await supabase.storage
+          .from("wardrobe-images")
+          .remove([imgPath]); // ✅ use stored path, not url
+
+        if (error) {
+          console.error("❌ Failed to delete from Supabase:", error.message);
+        } else {
+          console.log("✅ Deleted from Supabase:", imgPath);
+        }
+
+        // remove from local state
+        setImages((prev) => prev.filter((img) => img.id !== imgId));
+
+      } catch (err) {
+        console.error("Unexpected error deleting image:", err);
+      }
+    };
+
 
   // --------------------SCROLL FUNCTIONS --------------------
   const scrollLeft = () =>
@@ -111,11 +134,23 @@ const handleUpload = async (e) => {
   const scrollRight = () =>
     carouselRef.current?.scrollBy({ left: 250, behavior: "smooth" });
 
-  // -------------------- STEP 5: GROUP IMAGES BY CATEGORY --------------------
+  // --------------------filter img  --------------------
+  const filteredImages = 
+  selectedFilter === "All"
+  //show all img if All or selected option
+  ? images 
+  : images.filter((img) => {
+    if (Array.isArray(img.style)) {
+      return img.style.includes(selectedFilter); 
+    } else { 
+      return img.style === selectedFilter;
+    }
+  });
+  // -------------------- GROUP IMAGES BY CATEGORY --------------------
   // make each category (top, bottom, dress...) its own section
   //pls help me explain the syntax images.reduce((acc,img)) where did u get all these things from ? 
   //ive never seen those things 
-  const grouped = images.reduce((acc, img) => {
+  const grouped = filteredImages.reduce((acc, img) => {
     acc[img.category] = acc[img.category] || [];
     acc[img.category].push(img);
     return acc;
@@ -142,8 +177,7 @@ const handleUpload = async (e) => {
             onChange={handleUpload}
             className="hidden"
           />
-        </label>
-        
+        </label>      
           {/* -------------------- MUI MODAL -------------------- */}
         <Modal open={openModal} onClose={() => setOpenModal(false)}>
         <div className="bg-white p-6 rounded-2xl w-[90%] sm:w-[400px] mx-auto mt-[25vh] space-y-4 shadow-lg">
@@ -160,11 +194,8 @@ const handleUpload = async (e) => {
               />
             </div>
           )}
-          {/* -------------------- FILTER BAR -------------------- */}
-          {/* let users filter wardrobe items by style */}
 
-
-             {/* -------------------- Title input  -------------------- */}
+          {/* -------------------- Title input  -------------------- */}
           <input
             type="text"
             placeholder="Enter title..."
@@ -238,6 +269,29 @@ const handleUpload = async (e) => {
         </div>
       </Modal>
       </div>
+              {/* -------------------- FILTER DROPDOWN -------------------- */}
+              <div className="flex justify-center sm:justify-start mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
+            <label htmlFor="styleFilter" className="text-sm font-medium text-white">
+              Filter
+            </label>
+
+            <select
+              id="styleFilter"
+              value={selectedFilter}
+              onChange={(e) => setSelectedFilter(e.target.value)}
+              className="px-4 py-2 rounded-md text-heading bg-white text-sm w-[80%] sm:w-[200px]"
+            >
+              {/* “All” option resets filter */}
+              <option value="All">All</option>
+              <option value="Work">Work</option>
+              <option value="Daily">Daily</option>
+              <option value="Formal">Formal</option>
+              <option value="Casual">Casual</option>
+              <option value="Dates">Dates</option>
+            </select>
+          </div>
+        </div>
       {/* -------------------- GALLERY SECTION -------------------- */}
       {Object.keys(grouped).length === 0 ? (
         <p className="text-center text-white/70 italic">
@@ -273,6 +327,7 @@ const handleUpload = async (e) => {
                        {Array.isArray(img.style) ? img.style.join(", ") : img.style}
                     </p>
                   </div>
+                
                 </div>
               ))}
             </div>
