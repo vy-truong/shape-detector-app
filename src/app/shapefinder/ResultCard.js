@@ -30,7 +30,8 @@ export default function ResultCard({
   const [displayMode, setDisplayMode] = useState('single'); 
 
   //EXPAND TEXT USESTATE 
-  const [expandedText, setExpandedText] = useState(false);
+  // const [expandedText, setExpandedText] = useState(false);
+
 
   //STYLING MODE USE STATE 
   const CATEGORY_LIST = ["top", "bottom", "skirt", "dress"];
@@ -76,10 +77,6 @@ const handleTouchMove = (e, ref) => {
     touchStartX.current = e.touches[0].clientX;
   }
 };
-
-
-  
-
 
   const defaultSave = async (e) => {
     e.preventDefault();
