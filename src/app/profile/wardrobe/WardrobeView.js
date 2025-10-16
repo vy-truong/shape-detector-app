@@ -4,9 +4,9 @@ import { useState, useEffect, useRef } from "react";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { Modal } from "@mui/material";
-import supabase from "../config/supabaseClient";
+import supabase from "../../config/supabaseClient";
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'; // ✅ add this line
+import 'react-toastify/dist/ReactToastify.css';   
 
 export default function WardrobeView() {
 
@@ -93,8 +93,28 @@ const handleUpload = async (e) => {
 };
 
   // -------------------- HANDLE SAVE DETAILS --------------------
-  const handleSaveDetails = () => {
+  const handleSaveDetails = async () => {
     if (!pendingImage) return;
+
+     const { data, error } = await supabase
+     .from("wardrobe_items")
+     .insert([
+      {
+        title,
+        style,
+        image_url: pendingImage.url,
+        image_path: pendingImage.path,
+      } 
+    ]).select("*");
+    console.log("🧠 Insert result:", data, error);
+
+    if (error) {
+      console.error("Supabase insert error:", error.message);
+      toast.error("Failed to save to Supabase.");
+    } else {
+      toast.success("✅ Saved to Supabase wardrobe!");
+    }
+    
 
     const newItem = {
       ...pendingImage,

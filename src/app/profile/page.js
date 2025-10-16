@@ -5,11 +5,9 @@ import supabase  from "../config/supabaseClient"
 import Link from "next/link";
 import { shapeExplanations } from "../data/shapeExplanations.js";
 import NoResultBox from "./NoResultBox.js";
-import ProfileHeader from "./ProfileHeader.js";
 import Footer from "../components/Footer.js";
 import ResultCard from "../shapefinder/ResultCard.js";
-import ProfileView from "./ProfileView";
-import WardrobeView from "./WardrobeView";
+import WardrobePage from "./wardrobe/page";
 
 
 export default function MyProfilePage() {
@@ -96,7 +94,7 @@ export default function MyProfilePage() {
                   )}
                 </>
               ) : (
-                <WardrobeView />
+                <WardrobePage />
               )}
             </div>
           </section>
