@@ -129,32 +129,27 @@ export default function ShapeFinder() {
     console.log("Shape data:", shapeExplanations);
 
     return (
-    <main className="bg-bg text-text overflow-x-hidden w-full">
+    <main className=" text-text w-full">
     {/* Header Section */}
     <section className="bg-heading-hl w-full overflow-x-hidden"> 
       <div className="text-center mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-12 sm:pt-20">
-        <h3 className="text-xl sm:text-3xl md:text-4xl font-fraunces font-light italic text-mutedlight mb-6">
+        <h3 className="text-xl sm:text-3xl md:text-4xl font-fraunces font-light italic text-white">
           Shape Finder Calculation
         </h3>
-        <p className="text-mutedlight text-center sm:text-md leading-relaxed">
-          No more staring at your closet wondering what actually works for you. <br/>
-          Find outfits that flatter your shape, bring out your confidence, 
-          and make getting dressed feel effortless and even exciting.
-        </p>
       </div>
       {/* Measurement Form */}
       <section className="bg-heading-hl w-full overflow-x-hidden px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6 sm:p-10 overflow-hidden">  
-            <h2 className="text-2xl text-center text-heading font-fraunces font-light mb-4">
+            <h2 className="text-2xl text-center text-heading font-fraunces font-light">
                 Your Measurement
             </h2>
-            <p className="text-heading text-center text-sm sm:text-base mb-6">
+            <p className="text-heading text-center text-md sm:text-text/70 mt-4 mb-6">
                 Please measure around the fullest part of each area while standing straight.
             </p>
               <form  onSubmit={handleSubmit} className="space-y-4">
                 {/* Unit Radio button*/}
-                <div className="flex justify-center mt-[1.5rem] mb-[1.5rem]"> 
-                    <div className="flex bg-mutedlight rounded-full py-2 px-4">
+                <div className="flex justify-center mb-[1.5rem]"> 
+                    <div className="flex bg-bg rounded-full py-2 px-4">
                         <button
                         type="button"
                         onClick={() => setUnits("cm")}
@@ -190,7 +185,7 @@ export default function ShapeFinder() {
                         placeholder="Bust"
                         value={bust}
                         onChange={(e) => setBust(e.target.value)}
-                        className="shadow-combo bg-bg px-4 py-2 rounded-md w-full"
+                        className="shadow-md bg-bg px-4 py-2 rounded-md w-full"
                         />
                     </div>
 
@@ -201,7 +196,7 @@ export default function ShapeFinder() {
                         placeholder="Waist"
                             value={waist}
                             onChange={(e) => setWaist(e.target.value)}
-                        className="shadow-combo bg-bg px-4 py-2 rounded-md"
+                        className="shadow-md  bg-bg px-4 py-2 rounded-md"
                         />
                     </div> 
 
@@ -212,7 +207,7 @@ export default function ShapeFinder() {
                         placeholder="High Hip"
                         value={highHip}
                         onChange={(e) => setHighHip(e.target.value)}
-                        className="shadow-combo bg-bg px-4 py-2 rounded-md"
+                        className="shadow-md  bg-bg px-4 py-2 rounded-md"
                         />
                     </div>
                     <div className="flex flex-col gap-1">
@@ -222,7 +217,7 @@ export default function ShapeFinder() {
                         placeholder="Hip"
                         value={hip}
                         onChange={(e) => setHip(e.target.value)}
-                        className=" shadow-combo bg-bg px-4 py-2 rounded-md"
+                        className=" shadow-md  bg-bg px-4 py-2 rounded-md"
                         />
                     </div>
                 </div>
