@@ -16,9 +16,12 @@ export default function WardrobeView() {
   const [title, setTitle ] = useState(""); 
   const [category, setCategory] = useState("top");
   const [style, setStyle] = useState(["Work"]); 
-  const [updateImages, setUpdateImages] = useState([]); 
-  const [deleteImages, setDeleteImages] = useState(false); 
 
+  //update img info 
+  const [editingItem, setEditingItem] = useState(null); // store the item being edited
+  const [openEditModal, setOpenEditModal] = useState(false); // control modal visibility
+
+  //select img 
   const [selectedImages, setSelectedImages] = useState([]);
 
   //filter
@@ -121,6 +124,33 @@ const handleUpload = async (e) => {
     }
     setSelectedImages(updatedSelections);
   };
+
+  // -------------------- EDIT IMAGES --------------------
+  const handleEditImages = (item) => {
+    setEditingItem(item); 
+    setTitle(item.title); 
+    setCategory(item.category); 
+    setStyle(Array.isArray(item.style) ? item.style : [item.style]); 
+    setOpenEditModal(true);
+  }
+
+  const handleSaveEdit = () => {
+    if (!editingItem) return;
+
+    const updated = images.map((img) =>
+      img.id === editingItem.id
+        ? { ...img, title, category, style }
+        : img
+    );
+
+    setImages(updated);
+    setEditingItem(null);
+    setOpenEditModal(false);
+    setTitle("");
+    setStyle(["Work"]);
+    toast.success("Item updated successfully!");
+  };
+
 
    // -------------------- DELETE SELECTED IMAGES --------------------
    const handleDeleteSelected = async () => {
@@ -384,6 +414,13 @@ const handleUpload = async (e) => {
                           ? img.style.join(", ")
                           : img.style}
                       </p>
+                       {/* Edit img button */}
+                       <button
+                        onClick={() => handleEditImages(img)}
+                        className="mt-2 text-xs text-blue-500 hover:text-blue-700 underline"
+                      >
+                        Edit
+                      </button>
                     </div>
                   </div>
                 );
@@ -418,6 +455,78 @@ const handleUpload = async (e) => {
       pauseOnHover
       theme="colored" // optional: gives a nice blue theme
     />
+      {/* -------------------- EDIT MODAL -------------------- */}
+      <Modal open={openEditModal} onClose={() => setOpenEditModal(false)}>
+        <div className="bg-white p-6 rounded-2xl w-[90%] sm:w-[400px] mx-auto mt-[25vh] space-y-4 shadow-lg">
+          <h3 className="text-xl font-fraunces text-heading text-center">
+            Edit Item
+          </h3>
+
+          <input
+            type="text"
+            placeholder="Edit title..."
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full border border-gray-300 rounded-md p-2 text-gray-800 focus:ring-2 focus:ring-blue-400 outline-none"
+          />
+
+          <label className="text-gray-700 text-sm">Category:</label>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="px-4 py-2 rounded-md text-heading bg-white text-sm w-full"
+          >
+            <option value="top">Top</option>
+            <option value="bottom">Bottom</option>
+            <option value="skirt">Skirt</option>
+            <option value="dress">Dress</option>
+          </select>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-gray-700 text-sm">Style:</label>
+            <div className="flex flex-wrap gap-2">
+              {["Work", "Daily", "Formal", "Casual", "Dates"].map((option) => {
+                const selected = style.includes(option);
+                return (
+                  <button
+                    key={option}
+                    type="button"
+                    onClick={() =>
+                      setStyle((prev) =>
+                        selected
+                          ? prev.filter((s) => s !== option)
+                          : [...prev, option]
+                      )
+                    }
+                    className={`px-3 py-1 rounded-full border transition-all text-sm ${
+                      selected
+                        ? "bg-blue-600 text-white border-blue-600"
+                        : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+                    }`}
+                  >
+                    {option}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-3 pt-2">
+            <button
+              onClick={() => setOpenEditModal(false)}
+              className="text-gray-600"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSaveEdit}
+              className="bg-blue-600 text-white px-4 py-1 rounded-md hover:bg-blue-700"
+            >
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </Modal>
 
     </section>
   );
