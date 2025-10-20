@@ -11,9 +11,7 @@ export default function Home() {
     <main>
       <div>
         <Hero />
-        <HowItWorks/>
-        <GetStart />
-        <Footer />
+        {/* <Footer /> */}
 
       </div>
     </main>

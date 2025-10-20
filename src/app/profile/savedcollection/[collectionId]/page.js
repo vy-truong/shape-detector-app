@@ -16,6 +16,8 @@ export default function CollectionDetailPage({ params }) {
   const { collectionId } = use(params);
   const [collection, setCollection] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   // Selection & editing states
   const [selectedOutfits, setSelectedOutfits] = useState([]);
@@ -72,6 +74,7 @@ export default function CollectionDetailPage({ params }) {
     loadCollection();
   }, [collectionId]);
 
+  if (!mounted) return null;
   if (loading) return <p className="text-white p-10">Loading...</p>;
   if (!collection) return <p className="text-white p-10">Collection not found.</p>;
 

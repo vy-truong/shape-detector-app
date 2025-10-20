@@ -18,7 +18,7 @@ export default function CreateCollectionModal({
     <Modal open={open} onClose={onClose}>
       <div className="bg-white rounded-2xl w-[90%] sm:w-[420px] mx-auto mt-[30vh] p-6 text-heading shadow-lg space-y-4">
         <h3 className="text-lg font-fraunces text-center">
-          Name Your Outfit Collection
+          Name Outfit Collection
         </h3>
 
         <input

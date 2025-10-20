@@ -30,7 +30,7 @@ export default function ToolbarActions({
               : "bg-blue-500 text-white hover:bg-blue-600"
           }`}
         >
-          Preview Outfit
+          Mix Outfit
           {selectedCount > 1 ? ` (${selectedCount})` : ""}
         </button>
       )}

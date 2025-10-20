@@ -47,25 +47,25 @@ export default function Header() {
             <nav className="hidden text-md lg:gap-20 md:flex gap-6">
                 <Link 
                     href="/" 
-                    className="relative font-medium text-heading hover:text-heading-hl italic transition-colors duration-200"
+                    className="relative font-medium text-heading hover:text-heading-hl transition-colors duration-200"
                 >
                     Home
                 </Link>
                 <Link 
                     href="/about" 
-                    className="relative font-medium text-heading hover:text-heading-hl  italic transition-colors duration-200"
+                    className="relative font-medium text-heading hover:text-heading-hl  transition-colors duration-200"
                 >
                     About Us
                 </Link>
                 <Link 
                     href="/shapefinder" 
-                    className="relative font-medium text-heading hover:text-heading-hl italic transition-colors duration-200"
+                    className="relative font-medium text-heading hover:text-heading-hl transition-colors duration-200"
                 >
                     Shape Finder
                 </Link>
                 <Link 
                     href="/contact" 
-                    className="relative font-medium text-heading hover:text-heading-hl italic transition-colors duration-200"
+                    className="relative font-medium text-heading hover:text-heading-hl transition-colors duration-200"
                 >
                     Contact Us
                 </Link>
@@ -76,7 +76,7 @@ export default function Header() {
             <div className="hidden md:block">
                 <Link href="/profile" className="flex items-center gap-2">
                 {/* <User size={20} /> */}
-                <span className="text-heading hover:text-heading-hl italic">My Profile</span>
+                <span className="text-heading hover:text-heading-hl">My Profile</span>
                 </Link>
             </div>
 
