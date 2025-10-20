@@ -10,6 +10,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Header() {
     const  [open, setOpen ] = useState(false);
@@ -72,8 +73,10 @@ export default function Header() {
                 </nav>
 
 
+                <ThemeToggle />
             {/* Right: Profile */}
             <div className="hidden md:block">
+               
                 <Link href="/profile" className="flex items-center gap-2">
                 {/* <User size={20} /> */}
                 <span className="text-heading hover:text-heading-hl">My Profile</span>
