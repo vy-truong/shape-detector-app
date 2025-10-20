@@ -120,7 +120,7 @@ const handleTouchMove = (e, ref) => {
     }
   };
   return (
-    <section className="bg-white w-full">
+    <section className=" w-full">
       <div className="max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-20 py-10">
 
         {/* ===== BODY SHAPE RESULT SECTION ===== */}

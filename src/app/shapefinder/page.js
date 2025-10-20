@@ -129,16 +129,17 @@ export default function ShapeFinder() {
     console.log("Shape data:", shapeExplanations);
 
     return (
-    <main className=" text-text w-full">
+    <main className=" bg-gradient-to-br from-[#6FA6E8] via-[#5A8BD9] to-[#355CA8] text-text w-full">
     {/* Header Section */}
-    <section className="bg-heading-hl w-full overflow-x-hidden"> 
+    <section className=" w-full overflow-x-hidden"> 
       <div className="text-center mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-12 sm:pt-20">
         <h3 className="text-xl sm:text-3xl md:text-4xl font-fraunces font-light italic text-white">
           Shape Finder Calculation
         </h3>
       </div>
       {/* Measurement Form */}
-      <section className="bg-heading-hl w-full overflow-x-hidden px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <section className="bg-gradient-to-br from-[#6FA6E8] via-[#5A8BD9] to-[#355CA8]
+       w-full overflow-x-hidden px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6 sm:p-10 overflow-hidden">  
             <h2 className="text-2xl text-center text-heading font-fraunces font-light">
                 Your Measurement

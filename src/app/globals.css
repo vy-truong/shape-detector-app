@@ -1,67 +1,66 @@
 @import "tailwindcss";
 
 @theme {
-  /* 🎨 Colors */
-  --color-bg: hsl(38 52% 96%);
-  --color-mutedlight: hsl(0 0% 90%); /*lighter cool*/
-  --color-mutedwarm: hsl(38 70% 98%); /*lighter warm*/
-  /* not important text */
-  
+  /* 🎨 Light Mode */
+  --color-bg: hsl(220, 45%, 96%);          /* Soft off-white with blue tint */
+  --color-mutedlight: hsl(219, 40%, 94%);  /* Card background */
+  --color-mutedwarm: hsl(220, 38%, 91%);   /* Slight contrast zone */
 
-  /* --color-heading: hsl(206 48% 40%); */
-  --color-heading: hsl(211 45% 42%); 
-  --color-heading-hl: hsl(211 48% 60%); /*lighter hover blue*/
-  --color-heading-hd: hsl(211 48% 38%); 
+  --color-heading: hsl(217, 60%, 50%);     /* Main blue */
+  --color-heading-hl: hsl(213, 73%, 66%);  /* Hover / accent */
+  --color-heading-hd: hsl(222, 50%, 38%);  /* Deep navy */
 
-  /* Normal text */
-  --color-text2: hsl(120 24% 6%);
-  --color-text1: hsl(120 24% 20%);
-  --color-text: hsl(0 0% 16%);
+  --color-text: hsl(220, 18%, 20%);        /* Normal body text */
+  --color-text1: hsl(220, 14%, 35%);       /* Subtext */
+  --color-text2: hsl(220, 12%, 48%);       /* Muted / placeholder */
 
+  /* 🌑 Shadows */
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 8px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 20px rgba(0,0,0,0.12);
 
-  
-  
-
-  /* 🔤 Font sizes */
-  --text-xs: 0.75rem;   /* 12px */
-  --text-sm: 0.875rem;  /* 14px */
-  --text-base: 1rem;    /* 16px */
-  --text-lg: 1.25rem;   /* 20px */
-  --text-xl: 1.5rem;    /* 24px */
-  --text-2xl: 2rem;     /* 32px */
-  --text-3xl: 2.5rem;   /* 40px */
-  --text-4xl: 3rem;     /* 48px */
-  --text-5xl: 4rem;
-
-   /* ✍️ Fonts */
-   --font-inter: "Inter", sans-serif;
-   --font-fraunces: "Fraunces", serif;
-   --font-playfair: "Playfair Display", serif;
-   --font-cormo: "Cormorant Garamond", serif; 
-   
-
-    /* 🌑 Shadows */
-
-    /* 🌑 Drop shadow (classic material style) */
-  --shadow-drop: 0 8px 20px rgba(0, 0, 0, 0.15);
-
-/* 🌕 Inner shadow (subtle neumorphism) */
---shadow-inner: 
-  inset 2px 2px 5px rgba(0, 0, 0, 0.08),
-  inset -2px -2px 5px rgba(255, 255, 255, 0.6);
-
-
-  /* 🌗 Combo: inner + drop (soft neumorphism depth) */
-  --shadow-combo: 
-  inset 2px 2px 6px rgba(0, 0, 0, 0.15),
-  inset -2px -2px 6px rgba(255, 255, 255, 0.8),
-  0 6px 12px rgba(0, 0, 0, 0.12);
-  
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.12);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.2), 
-               0 4px 6px rgba(0, 0, 0, 0.1); /* more realistic */
+  /* 🪄 Fonts */
+  --font-inter: "Inter", sans-serif;
+  --font-fraunces: "Fraunces", serif;
+  --font-playfair: "Playfair Display", serif;
+  --font-cormo: "Cormorant Garamond", serif; 
 }
+
+/* 🌙 Dark Mode Overrides (Tailwind 4 syntax still reads these vars) */
+html.dark {
+  --color-bg: hsl(220, 25%, 13%);          /* Deep navy background */
+  --color-mutedlight: hsl(220, 20%, 18%);  /* Card / container */
+  --color-mutedwarm: hsl(220, 20%, 22%);   /* Section contrast */
+
+  --color-heading: hsl(213, 75%, 70%);     /* Bright blue text */
+  --color-heading-hl: hsl(213, 68%, 60%);  /* Hover glow blue */
+  --color-heading-hd: hsl(215, 63%, 48%);  /* Medium accent blue */
+
+  --color-text: hsl(210, 20%, 94%);        /* Main text (light grayish white) */
+  --color-text1: hsl(210, 16%, 80%);       /* Softer text */
+  --color-text2: hsl(210, 10%, 65%);       /* Muted gray */
+
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.6);
+  --shadow-md: 0 4px 8px rgba(0,0,0,0.5);
+  --shadow-lg: 0 8px 20px rgba(0,0,0,0.45);
+}
+
+/* 🔄 Smooth transition for color changes */
+html, body, * {
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+
+
+/* 🌈 Optional: gradient background for hero/headers */
+.bg-hero-light {
+  background: linear-gradient(to bottom right, #6FA6E8, #5A8BD9, #355CA8);
+}
+html.dark .bg-hero-light {
+  background: linear-gradient(to bottom right, #3A4F83, #2B4376, #1E2D4F);
+}
+
+/* Smooth scrolling & behavior */
 .scrollbar-hide {
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;

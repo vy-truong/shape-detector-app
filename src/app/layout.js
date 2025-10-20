@@ -4,7 +4,7 @@ import "./globals.css";
 
 
 export const metadata = {
-  title: "Wardrobe Picks",
+  title: "Shape Finder",
   description: "Find your body shape & style smarter",
 }; 
 
@@ -12,16 +12,18 @@ export const metadata = {
 /* START  */
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
       <body>
-        <Header /> 
-        {children}
+        <div>
+          <Header />
+          <main>{children}</main>
+        </div>
       </body>
-
     </html>
-
   );
 }
+
+
 
 
  

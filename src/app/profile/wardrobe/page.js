@@ -3,9 +3,11 @@ import WardrobeView from "./WardrobeView";
 
 export default function WardrobePage() {
   return (
-    <main className="bg-heading-hl min-h-screen text-white p-8">
+    <main className="bg-heading-hl min-h-screen text-white p-6 sm:p-8">
       <ProfileNav />
-      <WardrobeView/>
+      <div className="">
+        <WardrobeView/>
+      </div>
     </main>
   );
 }

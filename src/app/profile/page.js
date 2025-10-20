@@ -12,8 +12,10 @@ import WardrobePage from "./wardrobe/page";
 
 export default function MyProfilePage() {
     const [latestResult, setLatestResult] = useState(null);
-
     const [view, setView] = useState("profile"); //set view for pfp and wardrobe 
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => setMounted(true), []);
 
     useEffect(()=> {
         async function loadResults() {
@@ -55,11 +57,13 @@ export default function MyProfilePage() {
         loadResults() 
     }, [])
 
+    if (!mounted) return null;
+
     return (
-        <main>
-          {/* <ProfileHeader /> */}
+        <main className="">
+        
     
-          <section className="bg-white min-h-screen">
+          <section className=" min-h-screen">
             <div className="max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-20 py-10">
               {/* ===== Toggle Button ===== */}
               <div className="flex justify-center mb-8">

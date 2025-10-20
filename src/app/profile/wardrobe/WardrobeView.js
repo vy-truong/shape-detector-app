@@ -2,165 +2,199 @@
 
 import { useState, useEffect, useRef } from "react";
 import { IoCloudUploadOutline } from "react-icons/io5";
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { Modal } from "@mui/material";
 import supabase from "../../config/supabaseClient";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';   
+import WardrobeCarousel from "../components/WardrobeCarousel"; 
+import { ToastContainer, toast } from "react-toastify";
+import ToolbarActions from "../components/ToolbarActions";
+import OutfitPreviewModal from "../components/OutfitPreviewModal";
+import OutfitSaveModal from "../components/OutfitSaveModal";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function WardrobeView() {
+  // ======= STATE DEFINITIONS =======
 
-  //img upload state, start with empty array (nothing)
-  //represents a collection (list) of images, not one single image.
+  // List of all images (local + Supabase)
   const [images, setImages] = useState([]);
-  const [title, setTitle ] = useState(""); 
+
+  // Fields for the Add/Edit modals
+  const [title, setTitle] = useState("");
   const [category, setCategory] = useState("top");
-  const [style, setStyle] = useState(["Work"]); 
+  const [style, setStyle] = useState(["Work"]);
 
-  //update img info 
-  const [editingItem, setEditingItem] = useState(null); // store the item being edited
-  const [openEditModal, setOpenEditModal] = useState(false); // control modal visibility
+  // Track item being edited
+  const [editingItem, setEditingItem] = useState(null);
+  const [openEditModal, setOpenEditModal] = useState(false);
 
-  //select img 
+  // For selecting/deleting items in bulk
   const [selectedImages, setSelectedImages] = useState([]);
 
-  //filter
-  const [selectedFilter, setSelectedFilter] = useState("All"); 
+  // For filtering items by style
+  const [selectedFilter, setSelectedFilter] = useState("All");
 
-  const [pendingImage, setPendingImage ] = useState(null); 
-  const [openModal, setOpenModal] = useState(false); 
+  // For managing uploads
+  const [pendingImage, setPendingImage] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
 
+  //preview modal state 
+  const [openPreviewModal, setOpenPreviewModal] = useState(false);
+  const [selectedItemForPreview, setSelectedItemForPreview] = useState(null);
+  // Outfit preview & save-collection modal states
+  const [openOutfitModal, setOpenOutfitModal] = useState(false);
+  const [showCollectionPrompt, setShowCollectionPrompt] = useState(false);
+
+
+  // Prevent running localStorage sync on first render
   const didMount = useRef(false);
-  const carouselRef = useRef(null);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
-   // -------------------- STEP 1: LOAD FROM STORAGE --------------------
+
+  // ======= LOAD FROM LOCAL STORAGE ON MOUNT =======
   useEffect(() => {
     try {
       const stored = JSON.parse(localStorage.getItem("wardrobe") || "[]");
       setImages(stored);
       console.log("Loaded from localStorage:", stored);
     } catch (e) {
-      console.error("parse error", e);
-      toast.error("Failed to load local wardrobe.");
+      console.error("Error parsing wardrobe data:", e);
+      toast.error("Failed to load saved wardrobe.");
     }
   }, []);
 
-   // -------------------- STEP 2: SAVE TO STORAGE --------------------
-   useEffect(() => {
+
+  // ======= SAVE TO LOCAL STORAGE WHEN IMAGES CHANGE =======
+  useEffect(() => {
     if (didMount.current) {
       localStorage.setItem("wardrobe", JSON.stringify(images));
-      console.log("💾 Saved to localStorage:", images);
+      console.log("Saved to localStorage:", images);
     } else {
       didMount.current = true;
     }
   }, [images]);
 
+  useEffect(() => {
+    console.log("Selected images:", selectedImages);
+  }, [selectedImages]);
+  
 
-// -------------------- STEP 3: HANDLE IMAGE UPLOAD --------------------
-const handleUpload = async (e) => {
-  const files = Array.from(e.target.files);
 
-  for (const file of files) {
-    const filePath = `${crypto.randomUUID()}-${file.name}`;
-    toast.info(`⏳ Uploading ${file.name}...`); // ⚡ notify user upload started
+  // Defer render until mounted to avoid hydration mismatch
+  if (!mounted) return null;
 
-    const { data, error } = await supabase.storage
-      .from("wardrobe-images")    
-      .upload(filePath, file);
+  // ======= HANDLE IMAGE UPLOAD =======
+  const handleUpload = async (e) => {
+    const files = Array.from(e.target.files);
 
-    if (error) {
-      console.error("Supabase upload error:", error.message);
-      toast.error("Upload failed. Try again.");
-      return;
+    for (const file of files) {
+      const filePath = `${crypto.randomUUID()}-${file.name}`;
+      toast.info(`Uploading ${file.name}...`);
+
+      // Upload file to Supabase Storage
+      const { data, error } = await supabase.storage
+        .from("wardrobe-images")
+        .upload(filePath, file);
+
+      if (error) {
+        console.error("Supabase upload error:", error.message);
+        toast.error("Upload failed. Try again.");
+        return;
+      }
+
+      // Retrieve public URL for display
+      const { data: publicUrlData } = supabase.storage
+        .from("wardrobe-images")
+        .getPublicUrl(filePath);
+
+      const publicUrl = publicUrlData.publicUrl;
+
+      // Store temporarily to let user input title/category
+      setPendingImage({
+        id: crypto.randomUUID(),
+        url: publicUrl,
+        name: file.name,
+        path: filePath,
+      });
+      setOpenModal(true);
     }
 
-    const { data: publicUrlData } = supabase.storage
-      .from("wardrobe-images")
-      .getPublicUrl(filePath);
+    // Reset file input
+    e.target.value = "";
+  };
 
-    const publicUrl = publicUrlData.publicUrl;
 
-    setPendingImage({
-      id: crypto.randomUUID(),
-      url: publicUrl,
-      name: file.name,
-      path: filePath, 
-    });
-    setOpenModal(true);
-  }
-
-  e.target.value = "";
-};
-
-  // -------------------- HANDLE SAVE DETAILS --------------------
+  // =======  SAVE NEW ITEM DETAILS TO SUPABASE =======
   const handleSaveDetails = async () => {
     if (!pendingImage) return;
 
-     const { data, error } = await supabase
-     .from("wardrobe_items")
-     .insert([
-      {
-        title,
-        style,
-        image_url: pendingImage.url,
-        image_path: pendingImage.path,
-      } 
-    ]).select("*");
-    console.log("🧠 Insert result:", data, error);
+    // Insert new item record into Supabase
+    const { data, error } = await supabase
+      .from("wardrobe_items")
+      .insert([
+        {
+          title,
+          style,
+          category,
+          image_url: pendingImage.url,
+          image_path: pendingImage.path,
+          created_at: new Date().toISOString(),
+        },
+      ])
+      .select("*")
+      .single();
 
     if (error) {
       console.error("Supabase insert error:", error.message);
       toast.error("Failed to save to Supabase.");
-    } else {
-      toast.success("✅ Saved to Supabase wardrobe!");
+      return;
     }
-    
 
+    // Update local list and reset modal state
     const newItem = {
-      ...pendingImage,
-      title,
-      style,
-      category,
-      created_at: new Date().toISOString(),
+      id: data.id,            
+      title: data.title,
+      category: data.category,
+      style: data.style,
+      url: data.image_url,
+      path: data.image_path,
+      created_at: data.created_at,
     };
 
     setImages((prev) => [...prev, newItem]);
+
+    toast.success("Saved to Supabase wardrobe!");
+
     setPendingImage(null);
     setOpenModal(false);
     setTitle("");
     setStyle(["Work"]);
-
-    toast.success("Item added to wardrobe!");
   };
-  
-   // -------------------- TOGGLE SELECTION --------------------
+
+
+  // ======= HANDLE IMAGE SELECTION =======
   const toggleSelectImage = (imgId) => {
-    let updatedSelections = [...selectedImages];
-    const alreadySelected = updatedSelections.includes(imgId);
-    if (alreadySelected) {
-      updatedSelections = updatedSelections.filter((id) => id !== imgId);
-    } else {
-      updatedSelections.push(imgId);
-    }
-    setSelectedImages(updatedSelections);
+    setSelectedImages((prev) =>
+      prev.includes(imgId)
+        ? prev.filter((id) => id !== imgId)
+        : [...prev, imgId]
+    );
   };
 
-  // -------------------- EDIT IMAGES --------------------
+
+  // ======= EDIT EXISTING IMAGE DETAILS =======
   const handleEditImages = (item) => {
-    setEditingItem(item); 
-    setTitle(item.title); 
-    setCategory(item.category); 
-    setStyle(Array.isArray(item.style) ? item.style : [item.style]); 
+    setEditingItem(item);
+    setTitle(item.title);
+    setCategory(item.category);
+    setStyle(Array.isArray(item.style) ? item.style : [item.style]);
     setOpenEditModal(true);
-  }
+  };
 
   const handleSaveEdit = () => {
     if (!editingItem) return;
 
     const updated = images.map((img) =>
-      img.id === editingItem.id
-        ? { ...img, title, category, style }
-        : img
+      img.id === editingItem.id ? { ...img, title, category, style } : img
     );
 
     setImages(updated);
@@ -172,72 +206,168 @@ const handleUpload = async (e) => {
   };
 
 
-   // -------------------- DELETE SELECTED IMAGES --------------------
-   const handleDeleteSelected = async () => {
-    if(selectedImages.length === 0)
-      return; 
-    if(!window.confirm("Delete all selected images ?"))
-      return; 
+  // ======= DELETE SELECTED IMAGES =======
+  const handleDeleteSelected = async () => {
+    if (selectedImages.length === 0) return;
+    if (!window.confirm("Delete all selected images?")) return;
 
-    const toDelete = images.filter((img) => selectedImages.includes(img.id)); 
+    const toDelete = images.filter((img) => selectedImages.includes(img.id));
+
     try {
-      const {error} = await supabase.storage
-      .from("wardrobe-images")
-      .remove(toDelete.map((img) => img.path)); 
+      // Remove files from Supabase Storage
+      const { error } = await supabase.storage
+        .from("wardrobe-images")
+        .remove(toDelete.map((img) => img.path));
 
       if (error) {
         console.error("Error deleting:", error.message);
         toast.error("Failed to delete from Supabase.");
       } else {
-        console.log("Deleted selected images:", toDelete);
         toast.success(`Deleted ${toDelete.length} image(s)`);
       }
 
-      setImages((prev) => prev.filter((img) => !selectedImages.includes(img.id))); 
-      setSelectedImages([]); 
-    } catch (err) { 
-      console.error("error: ", err);
+      // Remove from local state
+      setImages((prev) =>
+        prev.filter((img) => !selectedImages.includes(img.id))
+      );
+      setSelectedImages([]);
+    } catch (err) {
+      console.error("Unexpected delete error:", err);
       toast.error("Unexpected error while deleting.");
     }
-   }
+  };
 
-  // --------------------SCROLL FUNCTIONS --------------------
-  const scrollLeft = () =>
-    carouselRef.current?.scrollBy({ left: -250, behavior: "smooth" });
-  const scrollRight = () =>
-    carouselRef.current?.scrollBy({ left: 250, behavior: "smooth" });
 
-  // --------------------filter img  --------------------
-  const filteredImages = 
-  selectedFilter === "All"
-  ? images 
-  : images.filter((img) => {
-    if (Array.isArray(img.style)) {
-      return img.style.includes(selectedFilter); 
-    } else { 
-      return img.style === selectedFilter;
-    }
-  });
-  
-  // -------------------- GROUP IMAGES BY CATEGORY --------------------
+  // =======FILTER IMAGES BY STYLE AND GROUP BY CATEGORY =======
+  const filteredImages =
+    selectedFilter === "All"
+      ? images
+      : images.filter((img) =>
+          Array.isArray(img.style)
+            ? img.style.includes(selectedFilter)
+            : img.style === selectedFilter
+        );
+
   const grouped = filteredImages.reduce((acc, img) => {
     acc[img.category] = acc[img.category] || [];
     acc[img.category].push(img);
     return acc;
   }, {});
 
+  //handle opening preview 
+  const handlePreview = (item) => {
+    setSelectedItemForPreview(item);
+    setOpenPreviewModal(true);
+  };
+
+  // ======= SAVE OUTFIT COLLECTION TO SUPABASE =======
+  const handleConfirmCollection = async (name) => {
+
+    //valdidate user input. user must enter collection name
+    if (!name || !name.trim()) {
+      toast.error("Please enter a collection name.");
+      return;
+    }
+
+    //try to create a new collection (ALBUM)
+    try {
+      // insert into outfit_collections table
+      const { data: collectionData, error: collectionError } = await supabase
+        .from("outfit_collections")
+        .insert([{ name: name.trim(), created_at: new Date().toISOString() }])
+        // return the inserted row so we can use its ID.
+        .select("*")
+        .single();
+
+      //thru error to stop
+      if (collectionError) throw collectionError;
+
+      //get collection id from database outfit_collections 
+      const collectionId = collectionData.id;
+
+      //create a NEW OUTFIT record everytime user saved the shi 
+      // - outfit name var 
+      const outfitName = `Outfit ${new Date().toLocaleTimeString()}`;
+      const { data: outfitData, error: outfitError } = await supabase
+      .from("outfits")
+      .insert([
+        {
+          name: outfitName,
+          created_at: new Date().toISOString(),
+        },
+      ])
+      .select("*")
+      .single();
+
+      //thru error
+      if (outfitError) throw outfitError;
+      // Save the new outfit's ID to link with wardrobe items.
+      const outfitId = outfitData.id;
+
+      //---------- Link selected wardrobe items to this outfit
+
+      // insert selected wardrobe items into outfit_items table
+      //find all outfit user select using filter then map those out 
+      const selectedItems = images.filter((img) => selectedImages.includes(img.id));
+      
+      const outfitItems = selectedItems.map((item) => ({
+        outfit_id: outfitId,
+        wardrobe_item_id: item.id,
+        created_at: new Date().toISOString(),
+      }));
+
+      // Insert all these links into 'outfit_items' table at once.
+      const { error: outfitItemsError } = await supabase
+      .from("outfit_items")
+      .insert(outfitItems);
+
+    // If inserting failed, stop and show error.
+    if (outfitItemsError) throw outfitItemsError;
+
+    // ==============================
+    // Link this outfit to the chosen collection
+    //connect the outfit we just made(outfit_item) with the collection album.
+
+    const { error: linkError } = await supabase
+    .from("collection_outfits")
+    .insert([
+      {
+        collection_id: collectionId,
+        outfit_id: outfitId,
+        created_at: new Date().toISOString(),
+      },
+    ]);
+    //show error if fail 
+    if (linkError) throw linkError;
+
+    //-----------   
+    // /show success toast and reset all modal / selections.
+      toast.success(`Outfit saved to collection: "${name.trim()}"`);
+      setShowCollectionPrompt(false);
+      setOpenOutfitModal(false);
+      setSelectedImages([]);
+
+    } catch (error) {
+      console.error("Error saving outfit:", error);
+      toast.error("Failed to save supabase outfit collection.");
+    }
+  };
+
+  // ===== RENDER COMPONENT =======
   return (
     <section className="bg-heading-hl rounded-3xl p-8 sm:p-12 text-white shadow-sm">
+      {/* Page Title */}
       <h3 className="text-2xl font-fraunces font-medium mb-6 text-center sm:text-left">
         My Wardrobe
       </h3>
 
-      {/* ⚡ Toast container to display all notifications */}
-      {/* -------------------- UPLOAD BOX -------------------- */}
+      {/* ===== Upload Section ===== */}
       <div className="bg-heading-hd/60 rounded-2xl p-6 sm:flex-row items-center mb-10">
         <label className="flex flex-col items-center cursor-pointer text-center">
           <IoCloudUploadOutline size={45} className="text-white mb-2" />
-          <span className="text-sm text-white/80">Click or drag to upload images</span>
+          <span className="text-sm text-white/80">
+            Click or drag to upload images
+          </span>
           <input
             type="file"
             multiple
@@ -246,12 +376,15 @@ const handleUpload = async (e) => {
             className="hidden"
           />
         </label>
-  
-        {/* -------------------- MUI MODAL -------------------- */}
+
+        {/* Modal for adding new item details after upload */}
         <Modal open={openModal} onClose={() => setOpenModal(false)}>
           <div className="bg-white p-6 rounded-2xl w-[90%] sm:w-[400px] mx-auto mt-[25vh] space-y-4 shadow-lg">
-            <h3 className="text-xl font-fraunces text-heading text-center">Add Item Details</h3>
-  
+            <h3 className="text-xl font-fraunces text-heading text-center">
+              Add Item Details
+            </h3>
+
+            {/* Preview uploaded image */}
             {pendingImage && (
               <div className="flex justify-center">
                 <img
@@ -261,8 +394,8 @@ const handleUpload = async (e) => {
                 />
               </div>
             )}
-  
-            {/* -------------------- Title input -------------------- */}
+
+            {/* Input fields for title, category, and style */}
             <input
               type="text"
               placeholder="Enter title..."
@@ -270,8 +403,7 @@ const handleUpload = async (e) => {
               onChange={(e) => setTitle(e.target.value)}
               className="w-full border border-gray-300 rounded-md p-2 text-gray-800 focus:ring-2 focus:ring-blue-400 outline-none"
             />
-  
-            {/* Category dropdown */}
+
             <label className="text-gray-700 text-sm mt-2">Category:</label>
             <select
               value={category}
@@ -283,42 +415,44 @@ const handleUpload = async (e) => {
               <option value="skirt">Skirt</option>
               <option value="dress">Dress</option>
             </select>
-  
-            {/* -------------------- STYLE TAG SELECTOR -------------------- */}
+
+            {/* Style tag buttons */}
             <div className="flex flex-col gap-2 mt-2">
               <label className="text-gray-700 text-sm">Style:</label>
               <div className="flex flex-wrap gap-2">
-                {["Work", "Daily", "Formal", "Casual", "Dates"].map((option) => {
-                  const selected = style.includes(option);
-                  return (
-                    <button
-                      key={option}
-                      type="button"
-                      onClick={() =>
-                        setStyle((prev) =>
+                {["Work", "Daily", "Formal", "Casual", "Dates"].map(
+                  (option) => {
+                    const selected = style.includes(option);
+                    return (
+                      <button
+                        key={option}
+                        type="button"
+                        onClick={() =>
+                          setStyle((prev) =>
+                            selected
+                              ? prev.filter((s) => s !== option)
+                              : [...prev, option]
+                          )
+                        }
+                        className={`px-3 py-1 rounded-full border transition-all text-sm ${
                           selected
-                            ? prev.filter((s) => s !== option)
-                            : [...prev, option]
-                        )
-                      }
-                      className={`px-3 py-1 rounded-full border transition-all text-sm ${
-                        selected
-                          ? "bg-blue-600 text-white border-blue-600"
-                          : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-                      }`}
-                    >
-                      {option}
-                    </button>
-                  );
-                })}
+                            ? "bg-blue-600 text-white border-blue-600"
+                            : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+                        }`}
+                      >
+                        {option}
+                      </button>
+                    );
+                  }
+                )}
               </div>
             </div>
-  
-            {/* Modal buttons */}
+
+            {/* Modal action buttons */}
             <div className="flex justify-end gap-3 pt-2">
               <button
                 onClick={() => {
-                  toast.info("⚪ Canceled upload.");
+                  toast.info("Upload canceled.");
                   setOpenModal(false);
                 }}
                 className="text-gray-600"
@@ -335,8 +469,8 @@ const handleUpload = async (e) => {
           </div>
         </Modal>
       </div>
-  
-      {/* -------------------- FILTER DROPDOWN -------------------- */}
+
+      {/* ===== Filter Dropdown ===== */}
       <div className="flex justify-center sm:justify-start mb-6">
         <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
           <label htmlFor="styleFilter" className="text-sm font-medium text-white">
@@ -356,132 +490,59 @@ const handleUpload = async (e) => {
             <option value="Dates">Dates</option>
           </select>
         </div>
-        </div>
+      </div>
 
-        {/* --------------------DELETE / DELETE ALL IMG  -------------------- */}
-        {images.length > 0 && (
-          <div className="flex flex-wrap justify-center sm:justify-between items-center mb-6 gap-3">
-            {selectedImages.length > 0 ? (
-              <button
-                onClick={handleDeleteSelected}
-                className="bg-red-500 text-white text-sm px-4 py-2 rounded-full hover:bg-red-600 transition-all"
-              >
-                Delete Selected ({selectedImages.length})
-              </button>
-            ) : (
-              <div></div>
-            )}
+      {/* ===== Delete Controls ===== */}
+      <ToolbarActions
+        imagesCount={images.length}
+        selectedCount={selectedImages.length}
+        onDeleteSelected={handleDeleteSelected}
+        onToggleSelectAll={() => {
+          if (selectedImages.length === images.length) {
+            setSelectedImages([]);
+          } else {
+            setSelectedImages(images.map((img) => img.id));
+          }
+        }}
+        onPreviewOutfit={() => {
+          if (selectedImages.length < 2) {
+            toast.info("Select at least two items to preview an outfit.");
+            return;
+          }
+          setOpenOutfitModal(true);
+        }}
+      />
 
-            <button
-              onClick={() => {
-                if (selectedImages.length === images.length) {
-                  setSelectedImages([]);
-                } else {
-                  setSelectedImages(images.map((img) => img.id));
-                }
-              }}
-              className="text-sm text-white underline hover:text-gray-200 transition-all"
-            >
-              {selectedImages.length === images.length ? "Unselect All" : "Select All"}
-            </button>
-          </div>
-        )}
-  
-      {/* -------------------- GALLERY -------------------- */}
-      {Object.keys(grouped).length === 0 ? (
-        <p className="text-center text-white/70 italic">No items uploaded yet.</p>
-      ) : (
-        Object.keys(grouped).map((cat) => (
-          <div key={cat} className="mb-12 relative">
-            <h4 className="text-lg sm:text-xl text-white font-fraunces mb-4 capitalize">{cat}</h4>
-  
-            <div
-              ref={carouselRef}
-              className="flex overflow-x-auto space-x-4 scroll-smooth scrollbar-hide"
-            >
-              {grouped[cat].map((img) => {
-                const selected = selectedImages.includes(img.id);
-                return (
-                  <div
-                    key={img.id}
-                    className={`relative min-w-[220px] sm:min-w-[260px] rounded-3xl shadow-md hover:shadow-xl transition-all ${
-                      selected ? " bg-white" : "bg-white"
-                    }`}
-                  >
-                    {/* selection square */}
-                    <div
-                      onClick={() => toggleSelectImage(img.id)}
-                      className={`absolute top-5 right-5 w-5 h-5 border-2 rounded-sm cursor-pointer transition-all ${
-                        selected
-                          ? "bg-blue-500 border-blue-500"
-                          : "bg-white border-gray-300"
-                      }`}
-                      title="Select image"
-                    ></div>
-  
-                    <img
-                      src={img.url}
-                      alt={img.title || "Wardrobe item"}
-                      className="w-full h-48 sm:h-56 object-contain p-6"
-                    />
-                    <div className="px-4 pb-4">
-                      <p className="font-semibold text-heading text-sm truncate">
-                        {img.title || "Untitled"}
-                      </p>
-                      <p className="text-xs text-text/60 capitalize">
-                        {img.category} -{" "}
-                        {Array.isArray(img.style)
-                          ? img.style.join(", ")
-                          : img.style}
-                      </p>
-                       {/* Edit img button */}
-                       <button
-                        onClick={() => handleEditImages(img)}
-                        className="mt-2 text-xs text-blue-500 hover:text-blue-700 underline"
-                      >
-                        Edit
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-  
-            {/* ARROWS outside map */}
-            <button
-              className="hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 bg-white text-heading rounded-full shadow-md p-2 hover:bg-gray-100 z-20"
-              onClick={scrollLeft}
-            >
-              <IoIosArrowBack size={24} />
-            </button>
-            <button
-              className="hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 bg-white text-heading rounded-full shadow-md p-2 hover:bg-gray-100 z-20"
-              onClick={scrollRight}
-            >
-              <IoIosArrowForward size={24} />
-            </button>
-          </div>
-        ))
-      )}
-          <ToastContainer
-      position="top-center"  // 👈 this moves the toast to the top center
-      autoClose={4000}
-      hideProgressBar={true}
-      newestOnTop={false}
-      closeOnClick
-      rtl={false}
-      pauseOnFocusLoss
-      draggable
-      pauseOnHover
-      theme="colored" // optional: gives a nice blue theme
-    />
-      {/* -------------------- EDIT MODAL -------------------- */}
+
+
+
+      {/* ===== Shared Carousel Component ===== */}
+      <WardrobeCarousel
+        groupedImages={grouped}
+        selectedImages={selectedImages}
+        onSelectImage={toggleSelectImage}
+        onEditImage={handleEditImages}
+        showEditButton={true}
+        onPreview = {handlePreview}
+      />
+
+     
+      {/* Toast notification container */}
+      <ToastContainer
+        position="top-center"
+        autoClose={4000}
+        hideProgressBar
+        theme="colored"
+      />
+
+      {/* ===== Edit Item Modal ===== */}
       <Modal open={openEditModal} onClose={() => setOpenEditModal(false)}>
         <div className="bg-white p-6 rounded-2xl w-[90%] sm:w-[400px] mx-auto mt-[25vh] space-y-4 shadow-lg">
           <h3 className="text-xl font-fraunces text-heading text-center">
             Edit Item
           </h3>
 
+          {/* Edit title */}
           <input
             type="text"
             placeholder="Edit title..."
@@ -490,6 +551,7 @@ const handleUpload = async (e) => {
             className="w-full border border-gray-300 rounded-md p-2 text-gray-800 focus:ring-2 focus:ring-blue-400 outline-none"
           />
 
+          {/* Edit category */}
           <label className="text-gray-700 text-sm">Category:</label>
           <select
             value={category}
@@ -502,6 +564,7 @@ const handleUpload = async (e) => {
             <option value="dress">Dress</option>
           </select>
 
+          {/* Edit style tags */}
           <div className="flex flex-col gap-2">
             <label className="text-gray-700 text-sm">Style:</label>
             <div className="flex flex-wrap gap-2">
@@ -531,6 +594,7 @@ const handleUpload = async (e) => {
             </div>
           </div>
 
+          {/* Modal actions */}
           <div className="flex justify-end gap-3 pt-2">
             <button
               onClick={() => setOpenEditModal(false)}
@@ -547,8 +611,36 @@ const handleUpload = async (e) => {
           </div>
         </div>
       </Modal>
+      {/* ===== Preview Mix & Match Modal ===== */}
+      {/* Mix & Match Preview Modal */}
+<OutfitPreviewModal
+  open={openOutfitModal}
+  onClose={() => setOpenOutfitModal(false)}
+  selectedItems={images.filter((img) => selectedImages.includes(img.id))}
+  onSaveClick={() => setShowCollectionPrompt(true)}
+/>
+
+{/* Create Collection Prompt */}
+{/* <CreateCollectionModal
+  open={showCollectionPrompt}
+  onClose={() => setShowCollectionPrompt(false)}
+  onConfirm={handleConfirmCollection}
+/> */}
+<OutfitSaveModal
+  open={showCollectionPrompt}
+  onClose={() => setShowCollectionPrompt(false)}
+  selectedImages={selectedImages}
+  images={images}
+  onSuccess={() => {
+    setShowCollectionPrompt(false);
+    setOpenOutfitModal(false);
+    setSelectedImages([]);
+  }}
+/>
+
+
+
 
     </section>
   );
-  
 }
