@@ -4,28 +4,16 @@ import { useState } from "react";
 
 // MUI imports
 import Drawer from "@mui/material/Drawer";
-import IconButton from "@mui/material/IconButton";
+
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import MenuIcon from "@mui/icons-material/Menu";
-import ThemeToggle from "./ThemeToggle";
+
+
 
 export default function Header() {
-    const  [open, setOpen ] = useState(false);
-
-    const toggleDrawer = (open) => (e) => {
-        if (
-            e.type === "keydown" &&
-            (e.key === "Tab" || e.key === "Shift")
-          ) {
-            return;
-          }
-          setOpen(open);
-
-    };
-
+    
     const menuItems = [
         { text: "Home", href: "/" },
         { text: "About Us", href: "/about" },
@@ -35,7 +23,7 @@ export default function Header() {
       ];
 
     return (
-        <header className=" relative w-full flex items-center justify-between px-[4rem] py-4 bg-white">
+        <header className=" relative w-full flex items-center justify-between px-[4rem] py-4">
             {/* Left: Logo */}
             <div className= "text-xl font-cormo text-heading font-bold">
                 {/* <h2>SHAPE FINDER</h2> */}
@@ -73,7 +61,6 @@ export default function Header() {
                 </nav>
 
 
-                <ThemeToggle />
             {/* Right: Profile */}
             <div className="hidden md:block">
                
@@ -83,23 +70,15 @@ export default function Header() {
                 </Link>
             </div>
 
-            {/* Mobile Hamburger */}
-            <div className="md:hidden">
-                
-                <IconButton onClick={toggleDrawer(true)}>
-                    <MenuIcon fontSize="large"/>
-                </IconButton>
-            </div>
-
             {/* Mobile menu */}
-            <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
+            <Drawer>
                 <List sx={{ width: 250 }}>
                 {menuItems.map((item) => (
                     <ListItem key={item.text} disablePadding>
                     <ListItemButton
                         component="a"
                         href={item.href}
-                        onClick={toggleDrawer(false)}
+                      
                     >
                         <ListItemText primary={item.text} />
                     </ListItemButton>

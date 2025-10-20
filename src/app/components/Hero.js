@@ -7,18 +7,7 @@ export default function Hero() {
   return (
     <section className="relative w-full h-[100vh] flex items-center justify-center text-white overflow-hidden
     bg-gradient-to-br from-[#6FA6E8] via-[#5A8BD9] to-[#355CA8]
-
-
-
     ">
-
-      {/* Optional soft background image */}
-      <Image
-        src="/images/hero-bg.jpg" // replace with your actual image
-        alt="Wardrobe background"
-        fill
-        className="object-cover opacity-40"
-      />
 
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-3xl">

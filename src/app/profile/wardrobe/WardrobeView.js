@@ -357,19 +357,9 @@ export default function WardrobeView() {
   return (
     <section className="bg-heading-hl rounded-3xl p-8 sm:p-12 text-white shadow-sm">
       {/* Page Title */}
-      <h3 className="text-2xl font-fraunces font-medium mb-3 text-center sm:text-left">
+      <h3 className="text-2xl font-fraunces font-medium mb-6 text-center sm:text-left">
         My Wardrobe
       </h3>
-      <div className="flex justify-start mb-5">
-        <a
-          href="https://www.remove.bg/upload"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-block bg-white text-heading px-4 py-2 rounded-full text-sm hover:bg-gray-100 transition"
-        >
-          Remove img background
-        </a>
-      </div>
 
       {/* ===== Upload Section ===== */}
       <div className="bg-heading-hd/60 rounded-2xl p-6 sm:flex-row items-center mb-10">
@@ -480,37 +470,17 @@ export default function WardrobeView() {
         </Modal>
       </div>
 
-      {/* ===== Toolbar + Filter Row ===== */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        {/* Left: actions */}
-        <ToolbarActions
-          imagesCount={images.length}
-          selectedCount={selectedImages.length}
-          onDeleteSelected={handleDeleteSelected}
-          onToggleSelectAll={() => {
-            if (selectedImages.length === images.length) {
-              setSelectedImages([]);
-            } else {
-              setSelectedImages(images.map((img) => img.id));
-            }
-          }}
-          onPreviewOutfit={() => {
-            if (selectedImages.length < 2) {
-              toast.info("Select at least two items to preview an outfit.");
-              return;
-            }
-            setOpenOutfitModal(true);
-          }}
-        />
-
-        {/* Right: filter */}
-        <div className="flex items-center gap-2 self-end sm:self-auto">
-          <label htmlFor="styleFilter" className="text-sm font-medium text-white">Filter</label>
+      {/* ===== Filter Dropdown ===== */}
+      <div className="flex justify-center sm:justify-start mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
+          <label htmlFor="styleFilter" className="text-sm font-medium text-white">
+            Filter
+          </label>
           <select
             id="styleFilter"
             value={selectedFilter}
             onChange={(e) => setSelectedFilter(e.target.value)}
-            className="px-4 py-2 rounded-md text-heading bg-white text-sm w-[180px]"
+            className="px-4 py-2 rounded-md text-heading bg-white text-sm w-[80%] sm:w-[200px]"
           >
             <option value="All">All</option>
             <option value="Work">Work</option>
@@ -521,6 +491,27 @@ export default function WardrobeView() {
           </select>
         </div>
       </div>
+
+      {/* ===== Delete Controls ===== */}
+      <ToolbarActions
+        imagesCount={images.length}
+        selectedCount={selectedImages.length}
+        onDeleteSelected={handleDeleteSelected}
+        onToggleSelectAll={() => {
+          if (selectedImages.length === images.length) {
+            setSelectedImages([]);
+          } else {
+            setSelectedImages(images.map((img) => img.id));
+          }
+        }}
+        onPreviewOutfit={() => {
+          if (selectedImages.length < 2) {
+            toast.info("Select at least two items to preview an outfit.");
+            return;
+          }
+          setOpenOutfitModal(true);
+        }}
+      />
 
 
 

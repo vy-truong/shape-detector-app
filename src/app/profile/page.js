@@ -63,7 +63,7 @@ export default function MyProfilePage() {
         <main className="">
         
     
-          <section className="bg-white min-h-screen">
+          <section className=" min-h-screen">
             <div className="max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-20 py-10">
               {/* ===== Toggle Button ===== */}
               <div className="flex justify-center mb-8">
