@@ -7,7 +7,7 @@ export default function ProfileNav() {
         My Wardrobe
       </Link>
       <Link href="/profile/savedcollection" className="hover:underline">
-        Saved Outfits
+        Saved
       </Link>
 
     </div>

@@ -8,6 +8,7 @@ import { Modal } from "@mui/material";
 import { SlSizeFullscreen } from "react-icons/sl";
 import { IoCloseOutline } from "react-icons/io5";
 import { MdDriveFileRenameOutline } from "react-icons/md";
+import { IoIosArrowRoundBack } from "react-icons/io";
 import "react-toastify/dist/ReactToastify.css";
 import ToolbarActions from "../../components/ToolbarActions";
 
@@ -173,22 +174,44 @@ export default function CollectionDetailPage({ params }) {
   return (
     <main className="bg-heading-hl min-h-screen text-white p-8 relative">
       <ProfileNav />
+      {/* Back Button */}
+      <button
+        onClick={() => window.history.back()}
+        className="flex items-center gap-2 text-white hover:text-white/80 transition-all mb-6"
+      >
+        <IoIosArrowRoundBack size={20} />
+        <span className="text-md">Back</span>
+      </button>
 
-      <h1 className="text-3xl font-fraunces mb-8 text-center sm:text-left tracking-wide">
+      <h1 className="text-xl font-fraunces mb-5 text-center sm:text-left tracking-wide">
         {collection.name || "Untitled Collection"}
       </h1>
 
-      {/* Toolbar appears only if any selected */}
-      {selectedOutfits.length > 0 && (
-        <ToolbarActions
-          imagesCount={collection.collection_outfits.length}
-          selectedCount={selectedOutfits.length}
-          onDeleteSelected={handleDeleteSelected}
-          onToggleSelectAll={handleToggleSelectAll}
-          showPreview={false}
-          showDelete={true}
-        />
-      )}
+      {/* Add New Outfit Button + Toolbar */}
+      <div className="flex flex-wrap justify-between items-center mb-8">
+        {/* Left: Add button */}
+        <button
+          onClick={() => (window.location.href = "/profile/wardrobe")}
+          className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-full transition-all shadow-md"
+        >
+          <span className="text-lg">＋</span>
+          Add New Outfit
+        </button>
+
+        {/* Right: Toolbar (Delete + Select All) */}
+        {selectedOutfits.length > 0 && (
+          <ToolbarActions
+            imagesCount={collection.collection_outfits.length}
+            selectedCount={selectedOutfits.length}
+            onDeleteSelected={handleDeleteSelected}
+            onToggleSelectAll={handleToggleSelectAll}
+            showPreview={false}
+            showDelete={true}
+          />
+        )}
+      </div>
+
+
 
       {/* ================== Outfit Grid ================== */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">

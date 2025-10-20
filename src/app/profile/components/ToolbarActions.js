@@ -49,15 +49,15 @@ export default function ToolbarActions({
           {selectedCount > 0 ? ` (${selectedCount})` : ""}
         </button>
     )}
-      </div>
+          {/* ==== RIGHT SIDE: Select All Toggle ==== */}
+        <button
+            onClick={onToggleSelectAll}
+            className="text-sm text-white underline hover:text-gray-200 transition-all"
+        >
+            {selectedCount === imagesCount ? "Unselect All" : "Select All"}
+        </button>
 
-      {/* ==== RIGHT SIDE: Select All Toggle ==== */}
-      <button
-        onClick={onToggleSelectAll}
-        className="text-sm text-white underline hover:text-gray-200 transition-all"
-      >
-        {selectedCount === imagesCount ? "Unselect All" : "Select All"}
-      </button>
+      </div>
     </div>
   );
 }

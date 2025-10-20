@@ -8,11 +8,17 @@ import ProfileNav from "../ProfileNav";
 // import ToolbarActions from "../components/ToolbarActions";
 // import InlineRename from "./components/InlineRename";
 import { useRouter } from "next/navigation";
+import { Modal } from "@mui/material";
+
 
 export default function SavedCollectionPage() {
   const [collections, setCollections] = useState([]);
   const [selectedCollections, setSelectedCollections] = useState([]);
   const router = useRouter();
+
+  const [openAddModal, setOpenAddModal] = useState(false);
+  const [newCollectionName, setNewCollectionName] = useState("");
+
 
   // Load collections on mount
   useEffect(() => {
@@ -70,21 +76,25 @@ export default function SavedCollectionPage() {
 
   // Add new collection
   const handleAddCollection = async () => {
-    const name = prompt("Enter collection name:");
-    if (!name) return;
-
+    if (!newCollectionName.trim()) {
+      toast.error("Please enter a collection name");
+      return;
+    }
+  
     const { data, error } = await supabase
       .from("outfit_collections")
-      .insert([{ name, created_at: new Date().toISOString() }])
+      .insert([{ name: newCollectionName, created_at: new Date().toISOString() }])
       .select("*")
       .single();
-
+  
     if (error) {
       console.error(error);
       toast.error("Failed to create collection");
     } else {
       setCollections((prev) => [...prev, data]);
       toast.success("New collection added");
+      setOpenAddModal(false);
+      setNewCollectionName("");
     }
   };
 
@@ -107,8 +117,6 @@ export default function SavedCollectionPage() {
 
   return (
     <section className="bg-heading-hl rounded-3xl p-8 sm:p-12 text-white shadow-sm">
-      <ProfileNav />
-
       <h3 className="text-2xl font-fraunces font-medium mb-6 text-center sm:text-left">
         Saved Collections
       </h3>
@@ -127,7 +135,7 @@ export default function SavedCollectionPage() {
 
         <div className="flex gap-4">
           <button
-            onClick={handleAddCollection}
+            onClick={setOpenAddModal(true)}
             className="bg-blue-500 text-white text-sm px-4 py-2 rounded-full hover:bg-blue-600 transition-all"
           >
             + New Collection
