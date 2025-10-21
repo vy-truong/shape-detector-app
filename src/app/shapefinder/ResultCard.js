@@ -16,28 +16,22 @@ export default function ResultCard({
   highHip,
   hip,
   units = "in", // default to inches if not passed
-  products = [], 
+  products = [],
   showSaveButton = false, // only show on ShapeFinder page, not Profile
   onSave, // optional save fn, otherwise fallback to defaultSave
 }) {
-  if (!bodyShape) return null; // no shape yet? just render nothing
-
   const [filter, setFilter] = useState("all"); // filter is for categories (top, dress, etc)
-  const [results, setResults] = useState([]);
   const carouselRef = useRef(null); // grab carousel DOM to scroll programmatically
 
   //DISPLAY MODE: SINGLE MODE AND  STYLING MODE
-  const [displayMode, setDisplayMode] = useState('single'); 
+  const [displayMode, setDisplayMode] = useState("single");
 
-  //EXPAND TEXT USESTATE 
+  //EXPAND TEXT USESTATE
   // const [expandedText, setExpandedText] = useState(false);
 
-
-  //STYLING MODE USE STATE 
+  //STYLING MODE USE STATE
   const CATEGORY_LIST = ["top", "bottom", "skirt", "dress"];
-  const [visibleRows, setVisibleRows] = useState([]); 
-  // one ref per row (so each row scrolls independently)
-  const rowRefs = useRef({});
+  const [visibleRows, setVisibleRows] = useState([]);
 
   const toggleRow = (categories) => {
     setVisibleRows((prev) =>
@@ -59,24 +53,26 @@ export default function ResultCard({
   };
 
   // Mobile swipe handlers
-const touchStartX = useRef(0);
+  const touchStartX = useRef(0);
 
-const handleTouchStart = (e) => {
-  touchStartX.current = e.touches[0].clientX;
-};
-
-const handleTouchMove = (e, ref) => {
-  if (!ref.current) return;
-  const diff = touchStartX.current - e.touches[0].clientX;
-  if (Math.abs(diff) > 30) {
-    // Swipe threshold
-    ref.current.scrollBy({
-      left: diff > 0 ? 200 : -200,
-      behavior: "smooth",
-    });
+  const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
-  }
-};
+  };
+
+  const handleTouchMove = (e, ref) => {
+    if (!ref.current) return;
+    const diff = touchStartX.current - e.touches[0].clientX;
+    if (Math.abs(diff) > 30) {
+      // Swipe threshold
+      ref.current.scrollBy({
+        left: diff > 0 ? 200 : -200,
+        behavior: "smooth",
+      });
+      touchStartX.current = e.touches[0].clientX;
+    }
+  };
+
+  if (!bodyShape) return null; // no shape yet? just render nothing
 
   const defaultSave = async (e) => {
     e.preventDefault();
@@ -389,5 +385,4 @@ const handleTouchMove = (e, ref) => {
   }
 
   
-
 

@@ -71,11 +71,11 @@ export default function Footer() {
                 {/* <p className="text-gray-600 text-sm mb-4">
                 Your feedback goes straight to my email ✨.  
                 Every note helps me improve and create more intuitive websites.  
-                Love ! 🩵
+                Love ! 
                 </p> */}
 
                 {state.succeeded ? (
-                    <p className="text-green-600 font-medium">Thanks for your feedback 💌</p>
+                    <p className="text-green-600 font-medium">Thanks for your feedback</p>
                 ) : (
                 <form 
                 onSubmit={handleSubmit}
@@ -144,7 +144,7 @@ export default function Footer() {
             </div>
 
             <div className="mt-10 border-t pt-4 text-center text-text/60 text-sm">
-                <p>© 2024 Vy's Shape Finder App. All Right Reserved.</p>
+                <p>© 2024 Vy&apos;s Shape Finder App. All Right Reserved.</p>
             </div>
         </footer>
         
