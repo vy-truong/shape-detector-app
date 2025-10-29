@@ -1,9 +1,5 @@
 # 🪞 ShapeFinder — Personal Styling & Wardrobe Guide  
 
-<p align="center">
-  <img src="https://your-demo-image-link-here" alt="ShapeFinder Demo" width="700"/>
-</p>
-
 ## 🌟 Project Overview  
 Many people, including myself, spend hours trying on outfits only to feel unsure about what truly suits them.  
 **ShapeFinder** was created to make that process simpler and more intuitive, helping users understand their body shape, visualize outfits digitally, and build confidence in their personal style while promoting mindful, sustainable fashion choices.  
