@@ -16,6 +16,9 @@ The project was born from the common frustration of spending time and money on c
 ## 💡 What I Learned  
 This project strengthened my skills in **full-stack development**, **UI design consistency**, and **building purposeful solutions** that make users feel more confident and creative.  
 
+## 💡 Future Features
+- User authentication
+
 ## How to run 
 1. npm install
 2. npm run dev
